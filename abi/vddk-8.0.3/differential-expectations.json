@@ -1,0 +1,44 @@
+[
+  {
+    "case": "symbols",
+    "class": "ABI_DIFFERENCE",
+    "deviation": "unsupported feature",
+    "reason": "The three reference-internal exports (IsFaultEnabled_Func, SetConfigOption, SetInjectedFault) are declared in no public header and their signatures are unknown; they are not exported until investigated. A consumer that imports them fails at load time instead of calling a guessed signature.",
+    "ledger": "VixDiskLib_SetConfigOption"
+  },
+  {
+    "case": "listmodes.postinit",
+    "class": "TRANSPORT_DIFFERENCE",
+    "deviation": "implementation limitation",
+    "reason": "Only implemented transports are listed: hotadd:nbdssl:nbd, the reference's order without file and san (D-0039). file (hosted disks) is not planned and san is unsupported by design (CONTRACT.md section 122).",
+    "ledger": "VixDiskLib_ListTransportModes"
+  },
+  {
+    "case": "connect*.local",
+    "class": "RETURN_CODE_DIFFERENCE",
+    "deviation": "unsupported feature",
+    "reason": "A NULL-parameter (local, hosted-disk) connection succeeds in the reference; local VMDK access is not implemented, so VIX_E_NOT_SUPPORTED is returned.",
+    "ledger": "VixDiskLib_Connect"
+  },
+  {
+    "case": "connectex.bad-transport",
+    "class": "RETURN_CODE_DIFFERENCE",
+    "deviation": "unsupported feature",
+    "reason": "Zeroed parameters select a local connection, where the reference ignores the transport list and succeeds; local connections are not implemented.",
+    "ledger": "VixDiskLib_ConnectEx"
+  },
+  {
+    "case": "connect.null-out",
+    "class": "RETURN_CODE_DIFFERENCE",
+    "deviation": "intentional safety improvement",
+    "reason": "The reference dereferences a NULL output pointer and faults (SIGSEGV); VIX_E_INVALID_ARG is returned instead.",
+    "ledger": "VixDiskLib_Connect"
+  },
+  {
+    "case": "args.getinfo-garbage",
+    "class": "RETURN_CODE_DIFFERENCE",
+    "deviation": "intentional safety improvement",
+    "reason": "The reference dereferences an arbitrary handle value and faults (SIGSEGV); handles here are validated by registry lookup and VIX_E_INVALID_HANDLE is returned.",
+    "ledger": "VixDiskLib_GetInfo"
+  }
+]

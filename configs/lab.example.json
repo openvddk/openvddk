@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "lab_id": "example-lab",
+  "note": "Schema example only. A real lab file references credentials; it never contains them.",
+  "status": "BLOCKED_NOT_READY",
+  "status_values": ["BLOCKED_NOT_READY", "READY_READ_ONLY", "READY_LIVE_CASES"],
+  "designated_by": "maintainer",
+  "designated_at": "2026-10-01T00:00:00Z",
+  "vcenter": {
+    "endpoint": "vcenter.example.invalid",
+    "version": "",
+    "tls_sha1_thumbprint": "",
+    "tls_sha256_fingerprint": "",
+    "credential_ref": "private:vcenter-service-account"
+  },
+  "esxi_hosts": [
+    {"name": "esx01.example.invalid", "version": "", "tls_sha256_fingerprint": ""}
+  ],
+  "proxies": [
+    {
+      "name": "worker-01",
+      "vm_moref": "vm-0",
+      "os": "AlmaLinux 9",
+      "ssh_endpoint": "worker-01.example.invalid:22",
+      "ssh_host_key_sha256": "",
+      "credential_ref": "private:worker-ssh",
+      "disk_enable_uuid": true,
+      "pvscsi_controllers": 1,
+      "reference_vddk_path": "/opt/vmware-vix-disklib-distrib"
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "fx-cold-1disk-small",
+      "vm_moref": "vm-0",
+      "definition": "tests/fixtures/fx-cold-1disk-small.json",
+      "allowed_mutations": ["snapshot.create:run-owned", "snapshot.remove:run-owned"]
+    }
+  ],
+  "datastores": [
+    {"name": "datastore1", "type": "VMFS"}
+  ],
+  "prohibited": ["san", "source-disk-writes"]
+}

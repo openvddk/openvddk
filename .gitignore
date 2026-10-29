@@ -1,0 +1,8 @@
+# Copyright 2026 Andrija Panic and the OpenVDDK contributors
+# SPDX-License-Identifier: Apache-2.0
+/build/
+conformance-work/
+*.test
+*.out
+.vscode/
+.idea/

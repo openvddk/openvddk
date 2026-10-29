@@ -1,0 +1,5 @@
+# Copyright 2026 Andrija Panic and the OpenVDDK contributors
+# SPDX-License-Identifier: Apache-2.0
+* text=auto eol=lf
+*.png binary
+*.gz binary

@@ -1,0 +1,389 @@
+{
+  "file": "libvixDiskLib.so.8.0.3",
+  "class": "ELFCLASS64",
+  "machine": "EM_X86_64",
+  "type": "ET_DYN",
+  "soname": "libvixDiskLib.so.8.0.3",
+  "needed": [
+    "librt.so.1",
+    "libssl.so.3",
+    "libcrypto.so.3",
+    "libdl.so.2",
+    "libpthread.so.0",
+    "libz.so.1",
+    "libgcc_s.so.1",
+    "libc.so.6",
+    "ld-linux-x86-64.so.2"
+  ],
+  "version_definitions": [
+    {
+      "name": "libvixDiskLib.so.8.0.3",
+      "flags": [
+        "base"
+      ]
+    },
+    {
+      "name": "VIXDISKLIB_1.0"
+    },
+    {
+      "name": "VIXDISKLIB_1.1",
+      "parents": [
+        "VIXDISKLIB_1.0"
+      ]
+    },
+    {
+      "name": "VIXDISKLIB_1.2",
+      "flags": [
+        "weak"
+      ],
+      "parents": [
+        "VIXDISKLIB_1.1"
+      ]
+    },
+    {
+      "name": "VIXDISKLIB_1.3",
+      "parents": [
+        "VIXDISKLIB_1.2"
+      ]
+    },
+    {
+      "name": "VIXDISKLIB_5.0",
+      "parents": [
+        "VIXDISKLIB_1.3"
+      ]
+    },
+    {
+      "name": "VIXDISKLIB_5.1",
+      "flags": [
+        "weak"
+      ],
+      "parents": [
+        "VIXDISKLIB_5.0"
+      ]
+    },
+    {
+      "name": "VIXDISKLIB_5.5",
+      "flags": [
+        "weak"
+      ],
+      "parents": [
+        "VIXDISKLIB_5.1"
+      ]
+    },
+    {
+      "name": "VIXDISKLIB_6.0",
+      "parents": [
+        "VIXDISKLIB_5.5"
+      ]
+    },
+    {
+      "name": "VIXDISKLIB_6.5",
+      "parents": [
+        "VIXDISKLIB_6.0"
+      ]
+    },
+    {
+      "name": "VIXDISKLIB_6.7",
+      "parents": [
+        "VIXDISKLIB_6.5"
+      ]
+    },
+    {
+      "name": "VIXDISKLIB_6.8",
+      "flags": [
+        "weak"
+      ],
+      "parents": [
+        "VIXDISKLIB_6.7"
+      ]
+    },
+    {
+      "name": "VIXDISKLIB.INTERNAL"
+    }
+  ],
+  "exports": [
+    {
+      "name": "VixDiskLib_AllocateConnectParams",
+      "version": "VIXDISKLIB_6.7",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Attach",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_CheckRepair",
+      "version": "VIXDISKLIB_1.1",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Cleanup",
+      "version": "VIXDISKLIB_1.1",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Clone",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Close",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Connect",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_ConnectEx",
+      "version": "VIXDISKLIB_1.1",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Create",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_CreateChild",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Defragment",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Disconnect",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_EndAccess",
+      "version": "VIXDISKLIB_5.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Exit",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Flush",
+      "version": "VIXDISKLIB_6.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_FreeBlockList",
+      "version": "VIXDISKLIB_6.7",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_FreeConnectParams",
+      "version": "VIXDISKLIB_1.1",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_FreeErrorText",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_FreeInfo",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_GetConnectParams",
+      "version": "VIXDISKLIB_1.1",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_GetErrorText",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_GetInfo",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_GetMetadataKeys",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_GetTransportMode",
+      "version": "VIXDISKLIB_1.1",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Grow",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Init",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_InitEx",
+      "version": "VIXDISKLIB_1.1",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_IsAttachPossible",
+      "version": "VIXDISKLIB_1.3",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_IsFaultEnabled_Func",
+      "version": "VIXDISKLIB_6.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_ListTransportModes",
+      "version": "VIXDISKLIB_1.1",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Open",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_PrepareForAccess",
+      "version": "VIXDISKLIB_5.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_QueryAllocatedBlocks",
+      "version": "VIXDISKLIB_6.7",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Read",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_ReadAsync",
+      "version": "VIXDISKLIB_6.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_ReadMetadata",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Rename",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_SetConfigOption",
+      "version": "VIXDISKLIB_6.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_SetInjectedFault",
+      "version": "VIXDISKLIB_6.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Shrink",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_SpaceNeededForClone",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Unlink",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Wait",
+      "version": "VIXDISKLIB_6.5",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_Write",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_WriteAsync",
+      "version": "VIXDISKLIB_6.0",
+      "default": true,
+      "type": "FUNC"
+    },
+    {
+      "name": "VixDiskLib_WriteMetadata",
+      "version": "VIXDISKLIB_1.0",
+      "default": true,
+      "type": "FUNC"
+    }
+  ],
+  "glibc_max": "GLIBC_2.16",
+  "bind_now": true,
+  "relro": true,
+  "exec_stack": false,
+  "textrel": false,
+  "static_tls": false,
+  "nodelete": false
+}

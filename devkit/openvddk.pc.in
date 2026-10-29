@@ -1,0 +1,15 @@
+# Copyright 2026 Andrija Panic and the OpenVDDK contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# pkg-config file of the OpenVDDK developer kit. It finds the kit relative
+# to its own place (lib/pkgconfig), so the kit can be unpacked anywhere.
+prefix=${pcfiledir}/../..
+includedir=${prefix}/include
+libdir=${prefix}/lib
+
+Name: OpenVDDK
+Description: VixDiskLib 8 compatible virtual disk library (read-only)
+URL: https://openvddk.com/
+Version: @VERSION@
+Cflags: -I${includedir}
+Libs: -L${libdir} -lvixDiskLib

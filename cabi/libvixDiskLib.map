@@ -1,0 +1,106 @@
+/*
+ * Copyright 2026 Andrija Panic and the OpenVDDK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Dynamic symbol surface of libvixDiskLib.so.8.0.3.
+ *
+ * Version nodes, their parent chain and the node each public function is
+ * bound to reproduce the reference library (docs/observations/ABI-0001).
+ * Consumers linked against the reference record these versions in their
+ * DT_VERNEED, so the binding is part of the ABI. Everything else, including
+ * the Go runtime and the cgo bridge, stays local.
+ *
+ * The three reference-internal exports (SetConfigOption, SetInjectedFault,
+ * IsFaultEnabled_Func) are deliberately absent until investigated; see
+ * COMPATIBILITY.md.
+ */
+
+VIXDISKLIB_1.0 {
+  global:
+    VixDiskLib_Attach;
+    VixDiskLib_Clone;
+    VixDiskLib_Close;
+    VixDiskLib_Connect;
+    VixDiskLib_Create;
+    VixDiskLib_CreateChild;
+    VixDiskLib_Defragment;
+    VixDiskLib_Disconnect;
+    VixDiskLib_Exit;
+    VixDiskLib_FreeErrorText;
+    VixDiskLib_FreeInfo;
+    VixDiskLib_GetErrorText;
+    VixDiskLib_GetInfo;
+    VixDiskLib_GetMetadataKeys;
+    VixDiskLib_Grow;
+    VixDiskLib_Init;
+    VixDiskLib_Open;
+    VixDiskLib_Read;
+    VixDiskLib_ReadMetadata;
+    VixDiskLib_Rename;
+    VixDiskLib_Shrink;
+    VixDiskLib_SpaceNeededForClone;
+    VixDiskLib_Unlink;
+    VixDiskLib_Write;
+    VixDiskLib_WriteMetadata;
+};
+
+VIXDISKLIB_1.1 {
+  global:
+    VixDiskLib_CheckRepair;
+    VixDiskLib_Cleanup;
+    VixDiskLib_ConnectEx;
+    VixDiskLib_FreeConnectParams;
+    VixDiskLib_GetConnectParams;
+    VixDiskLib_GetTransportMode;
+    VixDiskLib_InitEx;
+    VixDiskLib_ListTransportModes;
+} VIXDISKLIB_1.0;
+
+VIXDISKLIB_1.2 {
+} VIXDISKLIB_1.1;
+
+VIXDISKLIB_1.3 {
+  global:
+    VixDiskLib_IsAttachPossible;
+} VIXDISKLIB_1.2;
+
+VIXDISKLIB_5.0 {
+  global:
+    VixDiskLib_EndAccess;
+    VixDiskLib_PrepareForAccess;
+} VIXDISKLIB_1.3;
+
+VIXDISKLIB_5.1 {
+} VIXDISKLIB_5.0;
+
+VIXDISKLIB_5.5 {
+} VIXDISKLIB_5.1;
+
+VIXDISKLIB_6.0 {
+  global:
+    VixDiskLib_Flush;
+    VixDiskLib_ReadAsync;
+    VixDiskLib_WriteAsync;
+} VIXDISKLIB_5.5;
+
+VIXDISKLIB_6.5 {
+  global:
+    VixDiskLib_Wait;
+} VIXDISKLIB_6.0;
+
+VIXDISKLIB_6.7 {
+  global:
+    VixDiskLib_AllocateConnectParams;
+    VixDiskLib_FreeBlockList;
+    VixDiskLib_QueryAllocatedBlocks;
+} VIXDISKLIB_6.5;
+
+VIXDISKLIB_6.8 {
+} VIXDISKLIB_6.7;
+
+/* Carries the catch-all local binding. A node with a local list is not
+ * marked weak, which matches the reference's definition flags. */
+VIXDISKLIB.INTERNAL {
+  local:
+    *;
+};

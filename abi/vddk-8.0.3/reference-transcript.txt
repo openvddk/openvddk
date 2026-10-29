@@ -1,0 +1,325 @@
+case=symbols sym=VixDiskLib_Attach internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Clone internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Close internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Connect internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Create internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_CreateChild internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Defragment internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Disconnect internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Exit internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_FreeErrorText internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_FreeInfo internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_GetErrorText internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_GetInfo internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_GetMetadataKeys internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Grow internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Init internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Open internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Read internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_ReadMetadata internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Rename internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Shrink internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_SpaceNeededForClone internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Unlink internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Write internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_WriteMetadata internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_CheckRepair internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Cleanup internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_ConnectEx internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_FreeConnectParams internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_GetConnectParams internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_GetTransportMode internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_InitEx internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_ListTransportModes internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_IsAttachPossible internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_EndAccess internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_PrepareForAccess internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Flush internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_ReadAsync internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_WriteAsync internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_Wait internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_AllocateConnectParams internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_FreeBlockList internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_QueryAllocatedBlocks internal=0 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_IsFaultEnabled_Func internal=1 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_SetConfigOption internal=1 default=1 versioned=1 same=1
+case=symbols sym=VixDiskLib_SetInjectedFault internal=1 default=1 versioned=1 same=1
+case=symbols status=exit:0
+case=listmodes.preinit step=ListTransportModes value=null
+case=listmodes.preinit status=exit:0
+case=listmodes.postinit step=InitEx rc=0
+case=listmodes.postinit step=ListTransportModes value="file:san:hotadd:nbdssl:nbd"
+case=listmodes.postinit status=exit:0
+case=errtext.preinit step=GetErrorText code=0x0 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x1 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x3 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x6 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0xd result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x3e8 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0xbc6 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x32cb result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x36b8 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x3e80 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x3e87 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x3eb5 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x61a8 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x6590 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x270f result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0xffff result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0x700000003 result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit step=GetErrorText code=0xffffffffffffffff result=nonnull
+case=errtext.preinit step=GetErrorText info.text=<omitted>
+case=errtext.preinit status=exit:0
+case=errtext.postinit step=InitEx rc=0
+case=errtext.postinit step=GetErrorText code=0x0 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x1 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x3 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x6 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0xd result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x3e8 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0xbc6 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x32cb result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x36b8 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x3e80 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x3e87 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x3eb5 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x61a8 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x6590 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x270f result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0xffff result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0x700000003 result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit step=GetErrorText code=0xffffffffffffffff result=nonnull
+case=errtext.postinit step=GetErrorText info.text=<omitted>
+case=errtext.postinit status=exit:0
+case=errtext.locale step=GetErrorText.locale result=null
+case=errtext.locale status=exit:0
+case=errtext.free-null step=FreeErrorText.null returned=1
+case=errtext.free-null status=exit:0
+case=params.alloc step=AllocateConnectParams result=nonnull
+case=params.alloc step=AllocateConnectParams public_nonzero_bytes=0 credType=0 specType=0 port=0
+case=params.alloc step=AllocateConnectParams info.nonzero_offsets=80,81,82,83,84,85,86,87,88,89,90,91
+case=params.alloc step=AllocateConnectParams info.state=nonnull
+case=params.alloc step=FreeConnectParams returned=1
+case=params.alloc status=exit:0
+case=params.free-consumer-strings step=FreeConnectParams returned=1 frees_consumer_strings=no
+case=params.free-consumer-strings status=exit:0
+case=params.free-null step=FreeConnectParams.null returned=1
+case=params.free-null status=exit:0
+case=init.basic step=InitEx rc=0
+case=init.basic step=InitEx info.log=76 info.warn=0 info.panic=0
+case=init.basic step=Exit returned=1
+case=init.basic step=after-exit callbacks_invoked=0
+case=init.basic status=exit:0
+case=init.null-callbacks step=InitEx rc=0
+case=init.null-callbacks status=exit:0
+case=init.libdir-null step=InitEx rc=0
+case=init.libdir-null status=exit:0
+case=init.version-0.0 step=InitEx(0.0) rc=0
+case=init.version-0.0 status=exit:0
+case=init.version-1.0 step=InitEx(1.0) rc=0
+case=init.version-1.0 status=exit:0
+case=init.version-6.7 step=InitEx(6.7) rc=0
+case=init.version-6.7 status=exit:0
+case=init.version-7.0 step=InitEx(7.0) rc=0
+case=init.version-7.0 status=exit:0
+case=init.version-7.99 step=InitEx(7.99) rc=0
+case=init.version-7.99 status=exit:0
+case=init.version-8.0 step=InitEx(8.0) rc=0
+case=init.version-8.0 status=exit:0
+case=init.version-8.1 step=InitEx(8.1) rc=6
+case=init.version-8.1 status=exit:0
+case=init.version-8.3 step=InitEx(8.3) rc=6
+case=init.version-8.3 status=exit:0
+case=init.version-9.0 step=InitEx(9.0) rc=6
+case=init.version-9.0 status=exit:0
+case=init.version-max.0 step=InitEx(4294967295.0) rc=6
+case=init.version-max.0 status=exit:0
+case=init.twice step=InitEx.1 rc=0
+case=init.twice step=InitEx.2 rc=0
+case=init.twice status=exit:0
+case=init.legacy step=Init rc=0
+case=init.legacy status=exit:0
+case=init.legacy-then-ex step=Init rc=0
+case=init.legacy-then-ex step=InitEx rc=0
+case=init.legacy-then-ex status=exit:0
+case=init.exit-reinit step=InitEx.1 rc=0
+case=init.exit-reinit step=InitEx.2 rc=0
+case=init.exit-reinit status=exit:0
+case=init.exit-twice step=InitEx rc=0
+case=init.exit-twice step=Exit.twice returned=1
+case=init.exit-twice status=exit:0
+case=exit.preinit step=Exit.preinit returned=1
+case=exit.preinit status=exit:0
+case=init.config-missing step=InitEx rc=0
+case=init.config-missing status=exit:0
+case=init.config-valid step=InitEx rc=0
+case=init.config-valid status=exit:0
+case=init.config-garbage step=InitEx rc=0
+case=init.config-garbage status=exit:0
+case=connect.preinit step=Connect rc=16001
+case=connect.preinit step=Connect conn=null
+case=connect.preinit status=exit:0
+case=connect.local step=InitEx rc=0
+case=connect.local step=Connect rc=0
+case=connect.local step=Connect conn=nonnull
+case=connect.local step=Disconnect rc=0
+case=connect.local status=exit:0
+case=connectex.local step=InitEx rc=0
+case=connectex.local step=ConnectEx rc=0
+case=connectex.local step=ConnectEx conn=nonnull
+case=connectex.local step=Disconnect rc=0
+case=connectex.local status=exit:0
+case=connect.null-out step=InitEx rc=0
+case=connect.null-out status=SIGSEGV
+case=connectex.bad-transport step=InitEx rc=0
+case=connectex.bad-transport step=ConnectEx rc=0
+case=connectex.bad-transport step=ConnectEx conn=nonnull
+case=connectex.bad-transport status=exit:0
+case=args.open-null-conn step=InitEx rc=0
+case=args.open-null-conn step=Open rc=16054
+case=args.open-null-conn step=Open handle=null
+case=args.open-null-conn status=exit:0
+case=args.close-null step=InitEx rc=0
+case=args.close-null step=Close rc=1000
+case=args.close-null status=exit:0
+case=args.getinfo-null step=InitEx rc=0
+case=args.getinfo-null step=GetInfo rc=1000
+case=args.getinfo-null status=exit:0
+case=args.getinfo-garbage step=InitEx rc=0
+case=args.getinfo-garbage status=SIGSEGV
+case=args.gettransportmode-null step=InitEx rc=0
+case=args.gettransportmode-null step=GetTransportMode value=null
+case=args.gettransportmode-null status=exit:0
+case=args.read-null step=InitEx rc=0
+case=args.read-null step=Read rc=1000
+case=args.read-null status=exit:0
+case=args.write-null step=InitEx rc=0
+case=args.write-null step=Write rc=1000
+case=args.write-null status=exit:0
+case=args.readasync-null step=InitEx rc=0
+case=args.readasync-null step=ReadAsync rc=1000
+case=args.readasync-null status=exit:0
+case=args.writeasync-null step=InitEx rc=0
+case=args.writeasync-null step=WriteAsync rc=1000
+case=args.writeasync-null status=exit:0
+case=args.flush-null step=InitEx rc=0
+case=args.flush-null step=Flush rc=1000
+case=args.flush-null status=exit:0
+case=args.wait-null step=InitEx rc=0
+case=args.wait-null step=Wait rc=1000
+case=args.wait-null status=exit:0
+case=args.queryallocatedblocks-null step=InitEx rc=0
+case=args.queryallocatedblocks-null step=QueryAllocatedBlocks rc=1000
+case=args.queryallocatedblocks-null status=exit:0
+case=args.freeblocklist-null step=InitEx rc=0
+case=args.freeblocklist-null step=FreeBlockList rc=0
+case=args.freeblocklist-null status=exit:0
+case=args.freeinfo-null step=InitEx rc=0
+case=args.freeinfo-null step=FreeInfo.null returned=1
+case=args.freeinfo-null status=exit:0
+case=args.readmetadata-null step=InitEx rc=0
+case=args.readmetadata-null step=ReadMetadata rc=1000
+case=args.readmetadata-null status=exit:0
+case=args.writemetadata-null step=InitEx rc=0
+case=args.writemetadata-null step=WriteMetadata rc=1000
+case=args.writemetadata-null status=exit:0
+case=args.getmetadatakeys-null step=InitEx rc=0
+case=args.getmetadatakeys-null step=GetMetadataKeys rc=1000
+case=args.getmetadatakeys-null status=exit:0
+case=args.disconnect-null step=InitEx rc=0
+case=args.disconnect-null step=Disconnect rc=16054
+case=args.disconnect-null status=exit:0
+case=args.cleanup-null step=InitEx rc=0
+case=args.cleanup-null step=Cleanup rc=3
+case=args.cleanup-null step=Cleanup cleaned=77 remaining=77
+case=args.cleanup-null status=exit:0
+case=args.prepareforaccess-null step=InitEx rc=0
+case=args.prepareforaccess-null step=PrepareForAccess rc=3
+case=args.prepareforaccess-null status=exit:0
+case=args.endaccess-null step=InitEx rc=0
+case=args.endaccess-null step=EndAccess rc=3
+case=args.endaccess-null status=exit:0
+case=args.getconnectparams-null step=InitEx rc=0
+case=args.getconnectparams-null step=GetConnectParams rc=3
+case=args.getconnectparams-null status=exit:0
+case=args.unlink-null step=InitEx rc=0
+case=args.unlink-null step=Unlink rc=16054
+case=args.unlink-null status=exit:0
+case=args.rename-null step=InitEx rc=0
+case=args.rename-null step=Rename rc=16000
+case=args.rename-null status=exit:0
+case=args.grow-null step=InitEx rc=0
+case=args.grow-null step=Grow rc=16054
+case=args.grow-null status=exit:0
+case=args.checkrepair-null step=InitEx rc=0
+case=args.checkrepair-null step=CheckRepair rc=3
+case=args.checkrepair-null status=exit:0
+case=args.createchild-null step=InitEx rc=0
+case=args.createchild-null step=CreateChild rc=1000
+case=args.createchild-null status=exit:0
+case=args.shrink-null step=InitEx rc=0
+case=args.shrink-null step=Shrink rc=1000
+case=args.shrink-null status=exit:0
+case=args.defragment-null step=InitEx rc=0
+case=args.defragment-null step=Defragment rc=1000
+case=args.defragment-null status=exit:0
+case=args.isattachpossible-null step=InitEx rc=0
+case=args.isattachpossible-null step=IsAttachPossible rc=1000
+case=args.isattachpossible-null status=exit:0
+case=args.attach-null step=InitEx rc=0
+case=args.attach-null step=Attach rc=1000
+case=args.attach-null status=exit:0
+case=args.spaceneededforclone-null step=InitEx rc=0
+case=args.spaceneededforclone-null step=SpaceNeededForClone rc=1000
+case=args.spaceneededforclone-null status=exit:0
+case=args.create-null step=InitEx rc=0
+case=args.create-null step=Create rc=16054
+case=args.create-null status=exit:0
+case=args.clone-null step=InitEx rc=0
+case=args.clone-null step=Clone rc=16054
+case=args.clone-null status=exit:0
+case=preinit.open-null step=Open rc=16054
+case=preinit.open-null status=exit:0
+case=preinit.close-null step=Close rc=1000
+case=preinit.close-null status=exit:0
+case=preinit.getinfo-null step=GetInfo rc=1000
+case=preinit.getinfo-null status=exit:0
+case=preinit.prepareforaccess-empty step=PrepareForAccess rc=16001
+case=preinit.prepareforaccess-empty status=exit:0
+case=preinit.connectex-empty-params step=ConnectEx rc=16001
+case=preinit.connectex-empty-params step=ConnectEx conn=null
+case=preinit.connectex-empty-params status=exit:0

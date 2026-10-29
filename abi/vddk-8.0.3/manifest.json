@@ -1,0 +1,394 @@
+{
+  "schema": 1,
+  "generation": "VixDiskLib 8.0.3",
+  "reference": {
+    "package": "VMware-vix-disklib-8.0.3-23950268.x86_64.tar.gz",
+    "package_sha256": "aadcf8fcfa5fc0ca972283334a273aa49fff96fa2eaadb30b8cc0c71705c4754",
+    "library": "lib64/libvixDiskLib.so.8.0.3",
+    "library_sha256": "afa97c6285c17f55da1ca71caa5816eaf55c539c11a75f9974ddca9725364312"
+  },
+  "soname": "libvixDiskLib.so.8.0.3",
+  "links": [
+    {"name": "libvixDiskLib.so.8", "target": "libvixDiskLib.so.8.0.3"},
+    {"name": "libvixDiskLib.so", "target": "libvixDiskLib.so.8"}
+  ],
+  "max_glibc": "2.28",
+  "allowed_needed": ["libc.so.6", "libpthread.so.0", "libdl.so.2", "librt.so.1", "libm.so.6", "ld-linux-x86-64.so.2"],
+  "status_legend": [
+    "SUPPORTED: semantics implemented and differentially tested against the reference.",
+    "PARTIAL: implemented for the documented subset; other inputs fail explicitly.",
+    "PLANNED: exported; returns VIX_E_NOT_SUPPORTED after argument validation until implemented.",
+    "UNSUPPORTED-BY-DESIGN: will not be implemented; fails explicitly.",
+    "NOT-YET-INVESTIGATED: behavior not yet characterized; fails explicitly (or is not exported)."
+  ],
+  "functions": [
+    {
+      "name": "VixDiskLib_InitEx", "version": "VIXDISKLIB_1.1", "exported": true,
+      "signature": "VixError VixDiskLib_InitEx(uint32_t majorVersion, uint32_t minorVersion, VixDiskLibGenericLogFunc *log, VixDiskLibGenericLogFunc *warn, VixDiskLibGenericLogFunc *panic, const char *libDir, const char *configFile)",
+      "ownership": "Strings are borrowed for the call. Callbacks are retained until Exit or the next successful Init/InitEx and are invoked on the thread that produced the message.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "global",
+      "differential_tests": ["init.*", "exit.*"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Client versions <= 8.0 accepted, newer refused with VIX_E_NOT_SUPPORTED, repeated/after-Exit initialization succeeds, unreadable configuration files are ignored: all as observed in the reference. libDir is ignored. VMware's vixDiskLib.nfcAio.Session.BufSizeIn64KB and BufCount are honoured (D-0048); every other key VMware documents is accepted, has no effect, and is named in a warning at InitEx. Log volume and wording differ."
+    },
+    {
+      "name": "VixDiskLib_Init", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Init(uint32_t majorVersion, uint32_t minorVersion, VixDiskLibGenericLogFunc *log, VixDiskLibGenericLogFunc *warn, VixDiskLibGenericLogFunc *panic, const char *libDir)",
+      "ownership": "As InitEx without a configuration file.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "global",
+      "differential_tests": ["init.legacy*"], "app_uses": "unknown", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "As InitEx."
+    },
+    {
+      "name": "VixDiskLib_Exit", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "void VixDiskLib_Exit(void)",
+      "ownership": "Waits for in-flight log callbacks, then unregisters them. Ignored when called from inside a log callback.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "global",
+      "differential_tests": ["init.exit-*", "exit.preinit"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Repeated Exit and Exit without Init are harmless, as in the reference. Draining of open connections and disks arrives with the transports."
+    },
+    {
+      "name": "VixDiskLib_ListTransportModes", "version": "VIXDISKLIB_1.1", "exported": true,
+      "signature": "const char *VixDiskLib_ListTransportModes(void)",
+      "ownership": "Static string owned by the library; never freed by the caller.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "any",
+      "differential_tests": ["listmodes.*"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "NULL before initialization, as in the reference. After initialization lists the implemented transports (currently hotadd); the reference lists file:san:hotadd:nbdssl:nbd. san is never listed (unsupported by design)."
+    },
+    {
+      "name": "VixDiskLib_GetErrorText", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "char *VixDiskLib_GetErrorText(VixError err, const char *locale)",
+      "ownership": "Returns C heap memory owned by the caller, released with VixDiskLib_FreeErrorText. Never points into Go memory.",
+      "status": "SUPPORTED", "semantics": "full", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "any",
+      "differential_tests": ["errtext.*"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "",
+      "known_differences": "Text is this project's own wording (CONTRACT.md section 41). The code is taken from the low 16 bits for every value; the reference gives unrelated text for some values with high bits set and for VIX_ASYNC. A non-NULL locale returns NULL, as in the reference."
+    },
+    {
+      "name": "VixDiskLib_FreeErrorText", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "void VixDiskLib_FreeErrorText(char *errMsg)",
+      "ownership": "Releases a string from GetErrorText; NULL is accepted.",
+      "status": "SUPPORTED", "semantics": "full", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "any",
+      "differential_tests": ["errtext.*"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "",
+      "known_differences": ""
+    },
+    {
+      "name": "VixDiskLib_AllocateConnectParams", "version": "VIXDISKLIB_6.7", "exported": true,
+      "signature": "VixDiskLibConnectParams *VixDiskLib_AllocateConnectParams(void)",
+      "ownership": "Returns a zeroed block owned by the caller, released with FreeConnectParams. The reserved state member points to a library record.",
+      "status": "SUPPORTED", "semantics": "full", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "any",
+      "differential_tests": ["params.*"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Works before initialization, as in the reference. The internal reserved bytes are zero here; the reference fills them. Consumers must not rely on reserved members."
+    },
+    {
+      "name": "VixDiskLib_FreeConnectParams", "version": "VIXDISKLIB_1.1", "exported": true,
+      "signature": "void VixDiskLib_FreeConnectParams(VixDiskLibConnectParams *connectParams)",
+      "ownership": "Frees the block and strings the library allocated into it. Strings stored by the consumer are never freed, as in the reference. A block not allocated by this library is left alone.",
+      "status": "SUPPORTED", "semantics": "full", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "any",
+      "differential_tests": ["params.*"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "A block whose reserved state record is missing or foreign is not freed (leak instead of freeing memory of unknown origin)."
+    },
+    {
+      "name": "VixDiskLib_GetConnectParams", "version": "VIXDISKLIB_1.1", "exported": true,
+      "signature": "VixError VixDiskLib_GetConnectParams(const VixDiskLibConnection connection, VixDiskLibConnectParams **connectParams)",
+      "ownership": "On success returns a block owned by the caller, released with FreeConnectParams.",
+      "status": "PLANNED", "semantics": "none", "managed_disk": "planned", "hosted_disk": "n/a", "thread_safety": "per-connection",
+      "differential_tests": ["args.getconnectparams-null"], "app_uses": "unknown", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Unknown connection: VIX_E_INVALID_ARG, as in the reference."
+    },
+    {
+      "name": "VixDiskLib_Connect", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Connect(const VixDiskLibConnectParams *connectParams, VixDiskLibConnection *connection)",
+      "ownership": "Parameters are borrowed for the call; the connection is released with Disconnect.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "no", "thread_safety": "any",
+      "differential_tests": ["connect.*"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "vixcopy",
+      "known_differences": "Before initialization: VIX_E_DISK_NOINIT, as in the reference. A NULL output pointer returns VIX_E_INVALID_ARG; the reference faults. User/password credentials only. Nothing remote is validated until Open, as in the reference (HOTADD-0002). Local (hosted-disk) connections are not supported."
+    },
+    {
+      "name": "VixDiskLib_ConnectEx", "version": "VIXDISKLIB_1.1", "exported": true,
+      "signature": "VixError VixDiskLib_ConnectEx(const VixDiskLibConnectParams *connectParams, VixDiskLibBool readOnly, const char *snapshotRef, const char *transportModes, VixDiskLibConnection *connection)",
+      "ownership": "Parameters are borrowed for the call; the connection is released with Disconnect.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "no", "thread_safety": "any",
+      "differential_tests": ["connectex.*", "preinit.connectex-*", "lab: ab-swap, hotadd-crash (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "vixcopy (HOTADD-0003); nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Before initialization: VIX_E_DISK_NOINIT, as in the reference. User/password credentials only; the thumbprint (SHA-1 or SHA-256) is enforced when given. With HotAdd requested it signs in and refuses a BIOS UUID shared by several VMs with VIX_E_INVALID_ARG, as the reference does (HOTADD-0014, D-0018); every other remote check (credentials, VM, snapshot) is reported by Open, as in the reference. The transport list is read as the reference reads it: exact names only; file, san and names it does not know are skipped; a list with nothing usable, an empty string included, fails here with VIX_E_INVALID_ARG, as in the reference; outside a VMware virtual machine HotAdd is not usable, so a list of only hotadd fails here too, as in the reference (NBD-0019, NBD-0021). Local connections are not supported."
+    },
+    {
+      "name": "VixDiskLib_Disconnect", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Disconnect(VixDiskLibConnection connection)",
+      "ownership": "Releases the connection.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "n/a", "thread_safety": "per-connection",
+      "differential_tests": ["args.disconnect-null", "lab: ab-swap, hotadd-crash (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "vixcopy (HOTADD-0003); nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Unknown connection: VIX_E_DISK_INVALID_CONNECTION, as in the reference. Closes the connection's open disks and logs out."
+    },
+    {
+      "name": "VixDiskLib_PrepareForAccess", "version": "VIXDISKLIB_5.0", "exported": true,
+      "signature": "VixError VixDiskLib_PrepareForAccess(const VixDiskLibConnectParams *connectParams, const char *identity)",
+      "ownership": "Arguments are borrowed for the call.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "vCenter", "hosted_disk": "n/a", "thread_safety": "any",
+      "differential_tests": ["args.prepareforaccess-null", "preinit.prepareforaccess-*", "lab: API probe (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "vixcopy (HOTADD-0003)",
+      "known_differences": "Before initialization: VIX_E_DISK_NOINIT; NULL parameters: VIX_E_INVALID_ARG; both as in the reference. Disables RelocateVM_Task on the source VM with the identity as source ID (HOTADD-0002); a method already disabled returns VIX_E_OPERATION_DISABLED."
+    },
+    {
+      "name": "VixDiskLib_EndAccess", "version": "VIXDISKLIB_5.0", "exported": true,
+      "signature": "VixError VixDiskLib_EndAccess(const VixDiskLibConnectParams *connectParams, const char *identity)",
+      "ownership": "Arguments are borrowed for the call.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "vCenter", "hosted_disk": "n/a", "thread_safety": "any",
+      "differential_tests": ["args.endaccess-null", "lab: API probe (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "vixcopy (HOTADD-0003)",
+      "known_differences": "NULL parameters: VIX_E_INVALID_ARG, as in the reference. Re-enables the methods disabled by PrepareForAccess."
+    },
+    {
+      "name": "VixDiskLib_Cleanup", "version": "VIXDISKLIB_1.1", "exported": true,
+      "signature": "VixError VixDiskLib_Cleanup(const VixDiskLibConnectParams *connectParams, uint32_t *numCleanedUp, uint32_t *numRemaining)",
+      "ownership": "Counters are written only on success.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd recovery", "hosted_disk": "n/a", "thread_safety": "global",
+      "differential_tests": ["args.cleanup-null", "lab: ab-swap, hotadd-crash (HOTADD-0003)"], "app_uses": "unknown", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "NULL parameters: VIX_E_INVALID_ARG with counters untouched, as in the reference. Recovers orphaned HotAdd transactions of this proxy from the journal (CONTRACT.md section 126.7) and reports cleaned and remaining counts."
+    },
+    {
+      "name": "VixDiskLib_Open", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Open(const VixDiskLibConnection connection, const char *path, uint32_t flags, VixDiskLibHandle *diskHandle)",
+      "ownership": "The disk handle is released with Close.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "no", "thread_safety": "per-connection",
+      "differential_tests": ["args.open-null-conn", "preinit.open-null", "lab: ab-swap, hotadd-crash (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "vixcopy (HOTADD-0003); nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Unknown connection: VIX_E_DISK_INVALID_CONNECTION, as in the reference. Read-only opens only. HotAdd needs a snapshot (or a powered-off VM) and refuses encrypted and physical-mode RDM source disks; an independent disk is not a disk of the VM (13, 1 with nbd alone), as in the reference; a virtual-mode RDM is read. No silent fallback: a missing snapshot is an error, where the reference silently uses NBD (HOTADD-0002). Signs in here if ConnectEx did not (HotAdd not requested, or the sign-in failed there); a rejected sign-in is not retried."
+    },
+    {
+      "name": "VixDiskLib_Close", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Close(VixDiskLibHandle diskHandle)",
+      "ownership": "Releases the disk handle and every resource the open acquired.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "n/a", "thread_safety": "per-disk",
+      "differential_tests": ["args.close-null", "preinit.close-null", "lab: ab-swap, hotadd-crash (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "vixcopy (HOTADD-0003); nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Unknown handle: VIX_E_INVALID_HANDLE, as in the reference for NULL. Releases the guest device, detaches, removes redo leftovers and ends the journaled transaction; a failed step keeps the journal for recovery and returns an error."
+    },
+    {
+      "name": "VixDiskLib_GetInfo", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_GetInfo(VixDiskLibHandle diskHandle, VixDiskLibInfo **info)",
+      "ownership": "Returns C heap memory owned by the caller, released with FreeInfo.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "n/a", "thread_safety": "per-disk",
+      "differential_tests": ["args.getinfo-*", "preinit.getinfo-null", "lab: ab-swap, hotadd-crash (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "vixcopy (HOTADD-0003); nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Unknown handle: VIX_E_INVALID_HANDLE. An arbitrary non-NULL handle value faults the reference; it is rejected here. Geometry, adapter type, UUID and capacity come from the VMDK descriptors, as observed in the reference (HOTADD-0002): for a snapshot chain each field comes from the nearest descriptor that defines it, and the disk is reported as one link with no parent hint, as the reference does over HotAdd (HOTADD-0006)."
+    },
+    {
+      "name": "VixDiskLib_FreeInfo", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "void VixDiskLib_FreeInfo(VixDiskLibInfo *info)",
+      "ownership": "Releases a block from GetInfo including its strings; NULL is accepted.",
+      "status": "SUPPORTED", "semantics": "full", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "any",
+      "differential_tests": ["args.freeinfo-null", "lab: ab-swap, hotadd-crash (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": ""
+    },
+    {
+      "name": "VixDiskLib_GetTransportMode", "version": "VIXDISKLIB_1.1", "exported": true,
+      "signature": "const char *VixDiskLib_GetTransportMode(VixDiskLibHandle diskHandle)",
+      "ownership": "Static string owned by the library.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "n/a", "thread_safety": "any",
+      "differential_tests": ["args.gettransportmode-null", "lab: ab-swap, hotadd-crash (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "vixcopy (HOTADD-0003); nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Unknown handle: NULL, as in the reference. Returns hotadd for HotAdd opens."
+    },
+    {
+      "name": "VixDiskLib_Read", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Read(VixDiskLibHandle diskHandle, VixDiskLibSectorType startSector, VixDiskLibSectorType numSectors, uint8_t *readBuffer)",
+      "ownership": "The buffer is borrowed for the call and must hold numSectors * 512 bytes.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "no", "thread_safety": "per-disk",
+      "differential_tests": ["args.read-null", "lab: ab-swap, hotadd-crash (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "vixcopy (HOTADD-0003)",
+      "known_differences": "Unknown handle: VIX_E_INVALID_HANDLE, as in the reference for NULL. Byte-identical to the reference on the lab fixture (HOTADD-0003). A range beyond the capacity returns VIX_E_DISK_OUTOFRANGE."
+    },
+    {
+      "name": "VixDiskLib_ReadAsync", "version": "VIXDISKLIB_6.0", "exported": true,
+      "signature": "VixError VixDiskLib_ReadAsync(VixDiskLibHandle diskHandle, VixDiskLibSectorType startSector, VixDiskLibSectorType numSectors, uint8_t *readBuffer, VixDiskLibCompletionCB callback, void *cbData)",
+      "ownership": "The buffer must stay valid until the completion callback runs.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "no", "thread_safety": "per-disk",
+      "differential_tests": ["args.readasync-null", "lab: async probe and copy (HOTADD-0004)"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "vixcopy (HOTADD-0004); nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Unknown handle: VIX_E_INVALID_HANDLE, returned synchronously as in the reference. Over HotAdd the read completes on the calling thread before the call returns VIX_ASYNC; its result, including VIX_E_DISK_OUTOFRANGE, goes to the callback, as the reference does (HOTADD-0004). Used by the nbdkit VDDK plugin."
+    },
+    {
+      "name": "VixDiskLib_Write", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Write(VixDiskLibHandle diskHandle, VixDiskLibSectorType startSector, VixDiskLibSectorType numSectors, const uint8_t *writeBuffer)",
+      "ownership": "The buffer is borrowed for the call.",
+      "status": "UNSUPPORTED-BY-DESIGN", "semantics": "none", "managed_disk": "no (read-only)", "hosted_disk": "no", "thread_safety": "per-disk",
+      "differential_tests": ["args.write-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Read-only by design (D-0027). Unknown handle: VIX_E_INVALID_HANDLE. Valid handle: VIX_E_FILE_READ_ONLY (11), as the reference answers on a read-only handle (A15, D-0023). A write in the other I/O mode than the handle's first write: VIX_E_ASYNC_MIXEDMODE_UNSUPPORTED."
+    },
+    {
+      "name": "VixDiskLib_WriteAsync", "version": "VIXDISKLIB_6.0", "exported": true,
+      "signature": "VixError VixDiskLib_WriteAsync(VixDiskLibHandle diskHandle, VixDiskLibSectorType startSector, VixDiskLibSectorType numSectors, const uint8_t *writeBuffer, VixDiskLibCompletionCB callback, void *cbData)",
+      "ownership": "The buffer must stay valid until the completion callback runs.",
+      "status": "UNSUPPORTED-BY-DESIGN", "semantics": "none", "managed_disk": "no (read-only)", "hosted_disk": "no", "thread_safety": "per-disk",
+      "differential_tests": ["args.writeasync-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Read-only by design (D-0027). Unknown handle: VIX_E_INVALID_HANDLE. Valid handle: VIX_E_FILE_READ_ONLY (11), as the reference answers on a read-only handle (A15, D-0023). Returns VIX_ASYNC and reports 11 through the completion callback; mixed I/O modes as Write."
+    },
+    {
+      "name": "VixDiskLib_Flush", "version": "VIXDISKLIB_6.0", "exported": true,
+      "signature": "VixError VixDiskLib_Flush(VixDiskLibHandle diskHandle)",
+      "ownership": "",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "no", "thread_safety": "per-disk",
+      "differential_tests": ["args.flush-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Unknown handle: VIX_E_INVALID_HANDLE, as in the reference for NULL. VIX_OK for a valid read-only handle (nothing to flush)."
+    },
+    {
+      "name": "VixDiskLib_Wait", "version": "VIXDISKLIB_6.5", "exported": true,
+      "signature": "VixError VixDiskLib_Wait(VixDiskLibHandle diskHandle)",
+      "ownership": "",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "no", "thread_safety": "per-disk",
+      "differential_tests": ["args.wait-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Unknown handle: VIX_E_INVALID_HANDLE, as in the reference for NULL. VIX_OK for a valid handle: ReadAsync completes before it returns, so nothing is ever pending (HOTADD-0004)."
+    },
+    {
+      "name": "VixDiskLib_QueryAllocatedBlocks", "version": "VIXDISKLIB_6.7", "exported": true,
+      "signature": "VixError VixDiskLib_QueryAllocatedBlocks(VixDiskLibHandle diskHandle, VixDiskLibSectorType startSector, VixDiskLibSectorType numSectors, VixDiskLibSectorType chunkSize, VixDiskLibBlockList **blockList)",
+      "ownership": "Returns C heap memory owned by the caller, released with FreeBlockList.",
+      "status": "PARTIAL", "semantics": "partial", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "no", "thread_safety": "per-disk",
+      "differential_tests": ["args.queryallocatedblocks-null", "lab: API probe (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "vixcopy (HOTADD-0003); nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "Unknown handle: VIX_E_INVALID_HANDLE, as in the reference for NULL. Argument rules as observed in the reference (HOTADD-0002): chunk size a power of two from 128 to 131072 sectors, start and count chunk-aligned, at most 524288 chunks; a range crossing the end is clipped. For HotAdd the clipped range is reported as one allocated block, as in the reference."
+    },
+    {
+      "name": "VixDiskLib_FreeBlockList", "version": "VIXDISKLIB_6.7", "exported": true,
+      "signature": "VixError VixDiskLib_FreeBlockList(VixDiskLibBlockList *blockList)",
+      "ownership": "Releases a list from QueryAllocatedBlocks; NULL succeeds.",
+      "status": "SUPPORTED", "semantics": "full", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "any",
+      "differential_tests": ["args.freeblocklist-null", "lab: API probe (HOTADD-0003)"], "app_uses": "yes", "app_exercised": true, "external_consumer_exercised": "nbdkit 1.38.5 VDDK plugin (HOTADD-0025)",
+      "known_differences": "NULL returns VIX_OK, as in the reference."
+    },
+    {
+      "name": "VixDiskLib_ReadMetadata", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_ReadMetadata(VixDiskLibHandle diskHandle, const char *key, char *buf, size_t bufLen, size_t *requiredLen)",
+      "ownership": "Caller-provided buffer.",
+      "status": "SUPPORTED", "semantics": "full", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "no", "thread_safety": "per-disk",
+      "differential_tests": ["args.readmetadata-null", "lab: vixmeta A/B on seven disks (HOTADD-0037)"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "vixmeta (HOTADD-0037)",
+      "known_differences": "None found (D-0034): the value as the reference reports it, from the descriptors of the disk's chain (the snapshot point's own entries first) and, for disksignature, from the MBR; VIX_E_BUFFER_TOOSMALL with the required length when the value and its NUL do not fit; VIX_E_DISK_KEY_NOTFOUND for an unknown key; VIX_E_INVALID_ARG for a NULL key. Unknown handle: VIX_E_INVALID_HANDLE, as in the reference for NULL."
+    },
+    {
+      "name": "VixDiskLib_WriteMetadata", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_WriteMetadata(VixDiskLibHandle diskHandle, const char *key, const char *val)",
+      "ownership": "Arguments are borrowed for the call.",
+      "status": "UNSUPPORTED-BY-DESIGN", "semantics": "none", "managed_disk": "no (read-only)", "hosted_disk": "no", "thread_safety": "per-disk",
+      "differential_tests": ["args.writemetadata-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Read-only by design (D-0027). Unknown handle: VIX_E_INVALID_HANDLE. Valid handle: VIX_E_FILE_READ_ONLY (11), as the reference answers on a read-only handle (A15, D-0023)."
+    },
+    {
+      "name": "VixDiskLib_GetMetadataKeys", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_GetMetadataKeys(VixDiskLibHandle diskHandle, char *keys, size_t maxLen, size_t *requiredLen)",
+      "ownership": "Caller-provided buffer.",
+      "status": "SUPPORTED", "semantics": "full", "managed_disk": "hotadd, nbdssl, nbd (read-only)", "hosted_disk": "no", "thread_safety": "per-disk",
+      "differential_tests": ["args.getmetadatakeys-null", "lab: vixmeta A/B on seven disks (HOTADD-0037)"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "vixmeta (HOTADD-0037)",
+      "known_differences": "None found (D-0034): the keys sorted by byte value, each NUL-terminated, the list ended by one more NUL; VIX_E_BUFFER_TOOSMALL with the required length, the buffer untouched, when it does not fit. Unknown handle: VIX_E_INVALID_HANDLE, as in the reference for NULL."
+    },
+    {
+      "name": "VixDiskLib_Create", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Create(const VixDiskLibConnection connection, const char *path, const VixDiskLibCreateParams *createParams, VixDiskLibProgressFunc progressFunc, void *progressCallbackData)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "no", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.create-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Unknown connection: VIX_E_DISK_INVALID_CONNECTION, as in the reference; otherwise VIX_E_NOT_SUPPORTED."
+    },
+    {
+      "name": "VixDiskLib_CreateChild", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_CreateChild(VixDiskLibHandle diskHandle, const char *childPath, VixDiskLibDiskType diskType, VixDiskLibProgressFunc progressFunc, void *progressCallbackData)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "no", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.createchild-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Unknown handle: VIX_E_INVALID_HANDLE, as in the reference; otherwise VIX_E_NOT_SUPPORTED."
+    },
+    {
+      "name": "VixDiskLib_Clone", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Clone(const VixDiskLibConnection dstConnection, const char *dstPath, const VixDiskLibConnection srcConnection, const char *srcPath, const VixDiskLibCreateParams *vixCreateParams, VixDiskLibProgressFunc progressFunc, void *progressCallbackData, VixDiskLibBool overWrite)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "no", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.clone-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Unknown destination connection: VIX_E_DISK_INVALID_CONNECTION, as in the reference; otherwise VIX_E_NOT_SUPPORTED."
+    },
+    {
+      "name": "VixDiskLib_Grow", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Grow(VixDiskLibConnection connection, const char *path, VixDiskLibSectorType capacity, VixDiskLibBool updateGeometry, VixDiskLibProgressFunc progressFunc, void *progressCallbackData)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "no", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.grow-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Unknown connection: VIX_E_DISK_INVALID_CONNECTION, as in the reference; otherwise VIX_E_NOT_SUPPORTED."
+    },
+    {
+      "name": "VixDiskLib_Shrink", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Shrink(VixDiskLibHandle diskHandle, VixDiskLibProgressFunc progressFunc, void *progressCallbackData)",
+      "ownership": "",
+      "status": "UNSUPPORTED-BY-DESIGN", "semantics": "none", "managed_disk": "no (read-only)", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.shrink-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Read-only by design (D-0027). Unknown handle: VIX_E_INVALID_HANDLE. Valid handle: VIX_E_FILE_READ_ONLY (11), as the reference answers on a read-only handle (A15, D-0023)."
+    },
+    {
+      "name": "VixDiskLib_Defragment", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Defragment(VixDiskLibHandle diskHandle, VixDiskLibProgressFunc progressFunc, void *progressCallbackData)",
+      "ownership": "",
+      "status": "UNSUPPORTED-BY-DESIGN", "semantics": "none", "managed_disk": "no (read-only)", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.defragment-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Read-only by design (D-0027). Unknown handle: VIX_E_INVALID_HANDLE. Valid handle: VIX_E_FILE_READ_ONLY (11), as the reference answers on a read-only handle (A15, D-0023)."
+    },
+    {
+      "name": "VixDiskLib_Rename", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Rename(const char *srcFileName, const char *dstFileName)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "no", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.rename-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "NULL names: VIX_E_DISK_INVAL, as in the reference; otherwise VIX_E_NOT_SUPPORTED."
+    },
+    {
+      "name": "VixDiskLib_Unlink", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Unlink(VixDiskLibConnection connection, const char *path)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "no", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.unlink-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Unknown connection: VIX_E_DISK_INVALID_CONNECTION, as in the reference; otherwise VIX_E_NOT_SUPPORTED."
+    },
+    {
+      "name": "VixDiskLib_IsAttachPossible", "version": "VIXDISKLIB_1.3", "exported": true,
+      "signature": "VixError VixDiskLib_IsAttachPossible(VixDiskLibHandle parent, VixDiskLibHandle child)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "no", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.isattachpossible-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Unknown handle: VIX_E_INVALID_HANDLE, as in the reference; otherwise VIX_E_NOT_SUPPORTED."
+    },
+    {
+      "name": "VixDiskLib_Attach", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_Attach(VixDiskLibHandle parent, VixDiskLibHandle child)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "no", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.attach-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Unknown handle: VIX_E_INVALID_HANDLE, as in the reference; otherwise VIX_E_NOT_SUPPORTED."
+    },
+    {
+      "name": "VixDiskLib_SpaceNeededForClone", "version": "VIXDISKLIB_1.0", "exported": true,
+      "signature": "VixError VixDiskLib_SpaceNeededForClone(VixDiskLibHandle diskHandle, VixDiskLibDiskType cloneDiskType, uint64_t *spaceNeeded)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "no", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.spaceneededforclone-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Unknown handle: VIX_E_INVALID_HANDLE, as in the reference; otherwise VIX_E_NOT_SUPPORTED."
+    },
+    {
+      "name": "VixDiskLib_CheckRepair", "version": "VIXDISKLIB_1.1", "exported": true,
+      "signature": "VixError VixDiskLib_CheckRepair(const VixDiskLibConnection connection, const char *filename, VixDiskLibBool repair)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "no", "hosted_disk": "not investigated", "thread_safety": "n/a",
+      "differential_tests": ["args.checkrepair-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Unknown connection or NULL file name: VIX_E_INVALID_ARG, as in the reference; otherwise VIX_E_NOT_SUPPORTED."
+    },
+    {
+      "name": "VixDiskLib_IsFaultEnabled_Func", "version": "VIXDISKLIB_6.0", "exported": false,
+      "signature": "unknown (reference-internal, no public declaration)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "n/a",
+      "differential_tests": ["symbols"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Exported by the reference only; not exported here."
+    },
+    {
+      "name": "VixDiskLib_SetConfigOption", "version": "VIXDISKLIB_6.0", "exported": false,
+      "signature": "unknown (reference-internal, no public declaration)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "n/a",
+      "differential_tests": ["symbols"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Exported by the reference only; not exported here."
+    },
+    {
+      "name": "VixDiskLib_SetInjectedFault", "version": "VIXDISKLIB_6.0", "exported": false,
+      "signature": "unknown (reference-internal, no public declaration)",
+      "ownership": "",
+      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "n/a",
+      "differential_tests": ["symbols"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
+      "known_differences": "Exported by the reference only; not exported here."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+OpenVDDK
+Copyright 2026 Andrija Panić and the OpenVDDK contributors
+
+OpenVDDK was originally written by Andrija Panić.
+
+Licensed under the Apache License, Version 2.0 (see LICENSE). The
+third-party modules compiled into binary builds, and their licences, are
+listed in THIRD-PARTY-NOTICES.
+
+VMware, vSphere, vCenter, ESXi and VDDK are trademarks of Broadcom Inc. or
+its subsidiaries. OpenVDDK is independent and is not affiliated with or
+endorsed by Broadcom Inc. or its subsidiaries.

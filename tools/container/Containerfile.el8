@@ -1,0 +1,35 @@
+# Copyright 2026 Andrija Panic and the OpenVDDK contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Build and test environment for the libvixDiskLib compatibility library.
+#
+# glibc 2.28 (EL8) is the compatibility floor: artifacts built here run on
+# EL8, EL9, EL10, Ubuntu 20.04+ and other glibc >= 2.28 userspaces.
+# Every input is pinned: base image by digest, Go toolchain by SHA-256.
+# The resulting image ID and its RPM manifest are recorded by run.sh.
+
+FROM docker.io/library/almalinux@sha256:158fba66c3434c58d07fb48cb6f19e3da84a7d9494cb07774d5d36a746136dce
+
+ARG GO_VERSION=1.26.8
+ARG GO_SHA256=d0f743b33e8d8945e6b1f432edd15785c70507121d6e2a723b21285eddf8b57b
+
+RUN dnf -y install --setopt=install_weak_deps=False \
+        gcc make binutils file findutils diffutils which tar gzip git-core \
+        glibc-devel elfutils \
+    && dnf clean all \
+    && rm -rf /var/cache/dnf
+
+RUN curl -fsSL -o /tmp/go.tgz "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" \
+    && echo "${GO_SHA256}  /tmp/go.tgz" | sha256sum -c - \
+    && tar -C /usr/local -xzf /tmp/go.tgz \
+    && rm -f /tmp/go.tgz
+
+ENV PATH=/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    GOTOOLCHAIN=local \
+    GOPROXY=off \
+    GOSUMDB=off \
+    GOAMD64=v1 \
+    CGO_ENABLED=1 \
+    LC_ALL=C
+
+WORKDIR /src

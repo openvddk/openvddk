@@ -1,0 +1,175 @@
+{
+  "schema": 1,
+  "id": "fx-alma98-16g",
+  "purpose": "Mutable HotAdd fixture: small cold Linux VM; snapshot chains and a second disk from point-0002 on",
+  "created": "2026-10-01",
+  "vsphere": "7.0.3 (vCenter build 20990077, ESXi build 20328353)",
+  "guest": "AlmaLinux 9.8, LVM root (VG almalinux), cloned from the proxy image",
+  "disks": [
+    {
+      "label": "Hard disk 1",
+      "controller": "PVSCSI bus 0, unit 0",
+      "capacity_bytes": 17179869184,
+      "capacity_sectors": 33554432,
+      "provisioning": "thin",
+      "datastore_type": "NFS v3",
+      "content": "installed guest image (not generated); 32 of 64 ranges of 256 MiB are all zero"
+    },
+    {
+      "label": "Hard disk 2",
+      "controller": "PVSCSI bus 0, unit 1",
+      "capacity_bytes": 2147483648,
+      "capacity_sectors": 4194304,
+      "provisioning": "thin",
+      "datastore_type": "NFS v3",
+      "added": "2026-10-02, before point-0003, with the guest powered off",
+      "content": "never written: all zero"
+    }
+  ],
+  "ova": {
+    "file": "fixture-alma98-20261001.ova",
+    "bytes": 3574927360,
+    "sha256": "7c79f592dea07513bffb6056f65f01464afd81a142559770b62fa0761bb7f7c2",
+    "stored": [
+      "kept privately"
+    ],
+    "note": "Exported before point-0001 was taken; the guest was powered off later, so this OVA is not byte-identical to point-0001. Disk 2 and points 0002/0003 were added later; the OVA does not contain disk 2 (it is all zero and can be recreated as a 2 GiB thin disk)."
+  },
+  "points": [
+    {
+      "id": "point-0001",
+      "snapshot_name": "openvix-ref-0001",
+      "taken": "2026-10-01T19:51:00Z",
+      "power_state": "poweredOff (graceful guest shutdown before the snapshot)",
+      "disk": "Hard disk 1",
+      "sha256": "b3ae6ccefc478b83620f671e2b5ddcdc306eb6cbcb7c675ce2623f3ebfc23093",
+      "ranges": "point-0001.ranges",
+      "range_bytes": 268435456,
+      "measured_with": "Broadcom VDDK 8.0.3 build 23950268, transport hotadd, two runs, identical",
+      "observation": "docs/observations/HOTADD-0001-reference-hotadd-vsphere7.md"
+    },
+    {
+      "id": "point-0002",
+      "snapshot_name": "openvix-ref-0002",
+      "taken": "2026-10-02T08:15:09Z",
+      "power_state": "poweredOff (no guest activity since point-0001)",
+      "disks": [
+        {
+          "disk": "Hard disk 1",
+          "file": "fixture-alma98-000001.vmdk",
+          "chain_links": 2,
+          "sha256": "b3ae6ccefc478b83620f671e2b5ddcdc306eb6cbcb7c675ce2623f3ebfc23093",
+          "ranges": "point-0001.ranges"
+        }
+      ],
+      "measured_with": "Broadcom VDDK 8.0.3 and the candidate, transport hotadd, identical",
+      "observation": "docs/observations/HOTADD-0006-chains-and-multiple-disks.md"
+    },
+    {
+      "id": "point-0003",
+      "snapshot_name": "openvix-ref-0003",
+      "taken": "2026-10-02T08:15:26Z",
+      "power_state": "poweredOff (no guest activity since point-0001)",
+      "disks": [
+        {
+          "disk": "Hard disk 1",
+          "file": "fixture-alma98-000002.vmdk",
+          "chain_links": 3,
+          "sha256": "b3ae6ccefc478b83620f671e2b5ddcdc306eb6cbcb7c675ce2623f3ebfc23093",
+          "ranges": "point-0001.ranges"
+        },
+        {
+          "disk": "Hard disk 2",
+          "file": "fixture-alma98-disk2.vmdk",
+          "chain_links": 1,
+          "sha256": "a7c744c13cc101ed66c29f672f92455547889cc586ce6d44fe76ae824958ea51"
+        }
+      ],
+      "measured_with": "Broadcom VDDK 8.0.3 and the candidate, transport hotadd, identical",
+      "observation": "docs/observations/HOTADD-0006-chains-and-multiple-disks.md"
+    },
+    {
+      "id": "warm-0001",
+      "snapshot_name": "openvix-warm-0001",
+      "taken": "2026-10-02T08:32:12Z",
+      "power_state": "poweredOn: guest booted and running (tools running), no memory, not quiesced; crash-consistent",
+      "disks": [
+        {
+          "disk": "Hard disk 1",
+          "file": "fixture-alma98-000003.vmdk",
+          "chain_links": 4,
+          "sha256": "837d8dc46f603acd12fd38a29d84e83ae1099458868df64f38f7bb7e33ee6a50"
+        },
+        {
+          "disk": "Hard disk 2",
+          "file": "fixture-alma98-disk2-000001.vmdk",
+          "chain_links": 2,
+          "sha256": "a7c744c13cc101ed66c29f672f92455547889cc586ce6d44fe76ae824958ea51"
+        }
+      ],
+      "after": "guest shut down gracefully; the fixture is kept powered off",
+      "measured_with": "Broadcom VDDK 8.0.3 (while the guest ran) and the candidate (while the guest ran), transport hotadd, identical",
+      "note": "Not reproducible bit for bit: the guest boot changed disk 1. The snapshot itself is the durable copy.",
+      "observation": "docs/observations/HOTADD-0006-chains-and-multiple-disks.md"
+    },
+    {
+      "id": "cbt-0001",
+      "snapshot_name": "openvix-cbt-0001",
+      "taken": "2026-10-02T20:31:59Z",
+      "power_state": "poweredOn (CBT active since this boot), no memory, not quiesced",
+      "disks": [
+        {
+          "disk": "Hard disk 2",
+          "file": "fixture-alma98-disk2-000002.vmdk",
+          "change_id_suffix": "/2",
+          "sha256": "a7c744c13cc101ed66c29f672f92455547889cc586ce6d44fe76ae824958ea51"
+        }
+      ],
+      "note": "Hard disk 1 changed by the boot and is not measured at this point.",
+      "observation": "docs/observations/HOTADD-0007-one-connection-and-cbt.md"
+    },
+    {
+      "id": "cbt-0002",
+      "snapshot_name": "openvix-cbt-0002",
+      "taken": "2026-10-02T20:32:48Z",
+      "power_state": "poweredOn, no memory, not quiesced",
+      "guest_writes_since_cbt_0001": [
+        "7 MiB random at byte 104857600 of /dev/sdb",
+        "3 MiB random at byte 1572864000",
+        "4 KiB random at byte 2146447360"
+      ],
+      "changed_areas_since_cbt_0001": [
+        [
+          104857600,
+          7340032
+        ],
+        [
+          1572864000,
+          3145728
+        ],
+        [
+          2146435072,
+          65536
+        ]
+      ],
+      "disks": [
+        {
+          "disk": "Hard disk 2",
+          "file": "fixture-alma98-disk2-000003.vmdk",
+          "change_id_suffix": "/4",
+          "sha256": "3ba09f89356f55ef07a4d5e6db81b83a5e9a8d1f02605ca72e7d63d97e11ec32"
+        }
+      ],
+      "note": "Random data: not reproducible bit for bit; the snapshot is the durable copy. Hard disk 1 not measured.",
+      "observation": "docs/observations/HOTADD-0007-one-connection-and-cbt.md"
+    }
+  ],
+  "recreate_points_0002_0003": [
+    "Start from point-0001 (snapshot openvix-ref-0001) with the guest powered off; never power it on in between.",
+    "govc snapshot.create -vm <fixture> -m=false -q=false openvix-ref-0002",
+    "govc vm.disk.create -vm <fixture> -name fixture-alma98/fixture-alma98-disk2 -ds <datastore> -size 2G -controller pvscsi-1000   (thin by default; unit 1)",
+    "govc snapshot.create -vm <fixture> -m=false -q=false openvix-ref-0003",
+    "Check: every point reads disk 1 as b3ae6cce...c23093 and disk 2 as a7c744c1...ea51."
+  ],
+  "change_tracking": "enabled on 2026-10-02 (VirtualMachineConfigSpec.changeTrackingEnabled) for the CBT tests; points before cbt-0001 predate it"
+}
