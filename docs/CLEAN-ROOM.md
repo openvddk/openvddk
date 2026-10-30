@@ -74,10 +74,10 @@ numbers and vendor identifiers are not reused.
 ## What was never done
 
 - The reference library's code was not disassembled, decompiled or read.
-- No decompiler output, and no text derived from it, was used. A claim
-  about the reference's internals from any other source was treated as
-  unverified and settled by observation (for example how it reads the
-  attached disk, HOTADD-0012).
+- No decompiler output, and no text derived from it, was used. Any
+  statement about the reference library's internal workings, whatever its
+  source, was treated as unverified until observed from outside (for
+  example how it reads the attached disk, HOTADD-0012).
 - No proprietary object code is part of a build; the reference package is
   not in the repository.
 - The reference's message text is not in the repository, with two
