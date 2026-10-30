@@ -2,29 +2,47 @@
 
 CONTRACT.md §21, §54–§58.
 
-## Current posture (0.7.0)
+## Current posture (0.7.4)
 
-The library connects to vCenter; for HotAdd it attaches disks to the proxy
-and reads block devices; for NBDSSL and NBD it reads from the ESXi host's
-NFC service. The last review is docs/SECURITY-REVIEW-0.7.0.md. The
-following is enforced:
+The library connects to vCenter, or directly to an ESXi host; for HotAdd,
+through vCenter only, it attaches disks to the proxy and reads block
+devices; for NBDSSL and NBD it reads from the ESXi host's NFC service. The
+last review is docs/SECURITY-REVIEW-0.7.4.md, of the changes since
+docs/SECURITY-REVIEW-0.7.0.md. The following is enforced:
 
-- **TLS:** vCenter's thumbprint is pinned (SHA-1 or SHA-256) whenever it is
-  given, otherwise the system's roots and the host name are checked; the
-  NFC session to ESXi is pinned to the thumbprint vCenter gives in the
-  ticket. Nothing turns verification off. Connect, handshake and every NFC
-  step time out.
+- **TLS:** the server's thumbprint (vCenter's, or the ESXi host's on a
+  direct connection) is pinned (SHA-1 or SHA-256) whenever it is given,
+  otherwise the system's roots and the host name are checked. The NFC
+  sessions to ESXi are pinned to the thumbprint in the ticket; a ticket
+  without one is refused before it is sent. On a CPU without AES
+  instructions the TLS 1.2 offer is AES-128-GCM alone; when the host
+  refuses it, the library connects again with the full list, never in
+  clear text. Nothing turns verification off. Connect, handshake and every
+  NFC step time out; the wait for a reply follows
+  `vixDiskLib.nfc.ReadTimeoutMs` (default 60 s).
 - **No silent downgrade:** only transports the consumer listed are used.
-  NBDSSL is replaced by clear-text NBD only when the consumer listed `nbd`
-  after `nbdssl` and the host refused TLS for the data stream at the TLS
-  level (an alert, or a reply that is not TLS); a reset, an end of stream
-  or a timeout never counts (D-0039).
+  The list is read as VMware's library reads it: `hotadd`, `nbdssl` and
+  `nbd`, written exactly so, count; any other entry is skipped and named
+  in an informational log line, so `NBDSSL:nbd` means clear-text NBD
+  (SECURITY-REVIEW-0.7.4, finding 2). NBDSSL is replaced by clear-text NBD
+  only when the consumer listed `nbd` after `nbdssl` and the host refused
+  TLS for the data stream at the TLS level (an alert, or a reply that is
+  not TLS); a reset, an end of stream or a timeout never counts (D-0039).
+  The warning that says so is held back when VMware's
+  `vixDiskLib.transport.LogLevel` is 0 and no trace file is set (finding
+  3).
+- **Allocation queries:** over NBDSSL the disk's own encrypted session
+  answers QueryAllocatedBlocks. For a HotAdd disk the library asks the
+  host over an NFC session whose frames are not encrypted, as VMware's
+  library does: the ticket is presented inside TLS, but the disk's path
+  and its allocation map are not protected on the network (finding 4).
 - **Credentials:** user-ID credentials only. Passwords are never logged.
   The password is kept in the connection until Disconnect (Close may have
   to sign in again) and then wiped; each sign-in makes a string copy Go
   cannot wipe. ConnectEx signs in only when HotAdd is the only transport
   the connection could use (to check the worker's BIOS UUID); otherwise the
-  first Open does.
+  first Open does. On a direct ESXi connection, PrepareForAccess and
+  EndAccess sign in and fail with 20 without changing anything.
 - **Source disks:** read-only. Writes fail with an error. Attachments are
   `independent_nonpersistent`, so even a stray proxy write lands in a
   throw-away redo log. The opened device is set read-only (`BLKROSET`).
@@ -36,14 +54,24 @@ following is enforced:
 - **Guest device removal:** at Close the attached disk is removed from the
   worker's guest only after checking that the device under its name is
   still that disk (WWID, size, SCSI address, device number).
-- **Network input:** NFC replies, descriptor values, allocation bitmaps and
-  VMDK descriptors are bounded and checked; read pieces must lie inside
-  their request and arrive once; each request is completed exactly once,
-  never while its data is still being copied into the caller's buffer.
+- **Network input:** NFC replies, descriptor values, allocation bitmaps,
+  zero-skipped read pieces and VMDK descriptors are bounded and checked;
+  read pieces must lie inside their request and arrive once; a
+  zero-skipped piece is accepted only when the read asked for it, and its
+  runs must lie inside it in ascending order; each request is completed
+  exactly once, never while its data is still being copied into the
+  caller's buffer.
+- **Several NFC sessions per disk:** with `OpenVDDK.nbd.sessions` above 1,
+  each session has its own ticket and pin. Close ends the sessions one
+  after the other, so with a host that stopped answering it can take one
+  reply timeout per session (finding 1).
+- **Log files:** the library's own log file is created in
+  `openvddk-<user>` under `tmpDirectory` or the system's temporary
+  directory, which must be a directory of this user closed to others; the
+  file is opened without following a link, mode 0600.
 - **Diagnostic bundle:** `openvddk-admin bundle` takes only the library's
   own log files (regular files with one name, not links, in a private
   directory of the file's owner).
-
 - **Handles:** never dereferenced; forged or stale values are rejected
   (D-0006).
 - **Memory ownership:** consumer-visible memory is C heap with explicit
@@ -51,6 +79,7 @@ following is enforced:
 - **Configuration file:**
   - bounded to 1 MiB;
   - parsed without allocation proportional to hostile input;
+  - `#` outside double quotes starts a comment;
   - malformed input produces warnings, never crashes (fuzzed).
 - **Log redaction:** log text passes through `logx.Redact`, which strips
   password, cookie, ticket, token, session and key values before reaching
@@ -62,8 +91,9 @@ following is enforced:
 
 ## Threat model
 
-Covered by the review of 0.7.0 (docs/SECURITY-REVIEW-0.7.0.md), with the
-findings and what was done about each:
+Covered by the review of 0.7.0 (docs/SECURITY-REVIEW-0.7.0.md) and the
+review of the changes up to 0.7.4 (docs/SECURITY-REVIEW-0.7.4.md), with
+the findings and what was done about each:
 
 - malicious or compromised vCenter and ESXi; malformed NFC traffic;
 - man in the middle, through pinned TLS and no silent downgrade;
@@ -72,6 +102,9 @@ findings and what was done about each:
 - malicious VMDK metadata; integer overflow and memory exhaustion;
 - journal tampering; concurrent cleanup races;
 - the HotAdd device-identity checks of §57.
+- direct connections to an ESXi host (0.7.4), and the NFC read modes and
+  settings added in 0.7.2 and 0.7.3 (zero-skipped reads, the shorter
+  cipher offer, sessions per disk, timeouts, log levels).
 
 ## HotAdd: guest content on the proxy (HOTADD-0001, CONTRACT.md §126.8)
 
