@@ -28,7 +28,8 @@ decision.
 2. `LICENSE` at the top level is the Apache License 2.0 text, and the
    `NOTICE` file at the top level names the copyright holder and the
    original author. The SBOM (`make sbom`) declares `Apache-2.0` for the
-   project's binaries.
+   project's binaries, with the NOTICE's copyright line. The source headers
+   keep the ASCII spelling of the name.
 3. "The OpenVDDK contributors" are the people who contribute later; each
    keeps the copyright of their own contributions, under the project's
    licence. Until the first outside contribution the project has one

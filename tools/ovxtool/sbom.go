@@ -165,7 +165,7 @@ func writeSBOM(w io.Writer, version, commit string, created time.Time, bins []sb
 			Supplier: "Organization: OpenVDDK", DownloadLocation: "NOASSERTION",
 			Checksums:        []spdxChecksum{{Algorithm: "SHA256", ChecksumValue: b.SHA}},
 			LicenseConcluded: projectLicense, LicenseDeclared: projectLicense,
-			CopyrightText: "Copyright (c) 2026 Andrija Panic",
+			CopyrightText: "Copyright 2026 Andrija Panić and the OpenVDDK contributors",
 			Comment:       "built " + buildSettings(b.Info),
 		})
 		d.Relationships = append(d.Relationships, spdxRelationship{"SPDXRef-DOCUMENT", "DESCRIBES", id})
