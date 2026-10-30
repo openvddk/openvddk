@@ -1,4 +1,4 @@
-# Open VixDiskLib Compatibility Implementation
+# OpenVDDK: an independent implementation of the VixDiskLib API
 ## Normative Engineering Contract
 
 **Document version:** 0.42 (2026-10-29)  
