@@ -52,11 +52,9 @@ deliberate and has a reason.
   host it signs in to. It attaches the disk through the host itself (NET-0005, observed on an
   ESXi 6.7 host that a vCenter manages; a host without vCenter was not
   tried). So with `hotadd:nbdssl` VMware's library reads over HotAdd and
-  OpenVDDK over NBDSSL; the data is the same. No change is planned:
-  VMware's documentation does not describe HotAdd over a direct host
-  connection, and its programming guide says a host that a vCenter manages
-  is reached through vCenter (D-0052). Use NBD or NBDSSL on a direct ESXi
-  connection.
+  OpenVDDK over NBDSSL; the data is the same. HotAdd on a standalone ESXi
+  host, with the worker VM on that host, is a candidate for 0.7.5 (D-0052).
+  Until then, use NBD or NBDSSL on a direct ESXi connection.
 
   NBDSSL and NBD on such a connection read as VMware's library reads, and
   `PrepareForAccess` and `EndAccess` fail with 20 in both libraries.

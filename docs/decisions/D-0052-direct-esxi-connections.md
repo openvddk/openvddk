@@ -95,7 +95,18 @@ them:
    Server. No VMware document found describes HotAdd over a direct host
    connection, and the observation in NET-0005 was made on a
    vCenter-managed host. Revisit only if VMware documents it, or if a test
-   on a host without vCenter shows the reference using it.
+   on a host without vCenter shows the reference using it. **Amended
+   2026-10-30:** the reason above does not hold. VMware's VDDK guide
+   (Virtual Disk Transport Methods) does not limit HotAdd to vCenter: the
+   proxy must be a virtual machine that reaches the target's datastore, and
+   the hot-add happens on the ESXi host where the target and the proxy run.
+   Backup products built on VMware's library document HotAdd on a standalone
+   ESXi host, one no vCenter manages, when the proxy VM runs on that same
+   host, and its failure when such a host is in fact managed by vCenter
+   (Veeam KB1054, last modified 2026-10-19; Arcserve UDP, "The HotAdd
+   transport mode does not work", 2015). HotAdd on a standalone ESXi host,
+   with the proxy VM on that host, is therefore a candidate for 0.7.5, to be
+   observed with the reference first.
 7. **Messages** no longer say "vCenter" where the server may be an ESXi
    host:
    - the privilege refusal now begins "vSphere refused the operation";
@@ -120,7 +131,7 @@ them:
   NBD.
 - HotAdd on a direct connection stays out of 0.7.4 (point 6). That is
   final for this version, with the reference's observed behaviour recorded
-  in NET-0005 and KNOWN-DIFFERENCES. No later version is planned for it
-  (point 6).
+  in NET-0005 and KNOWN-DIFFERENCES. It is a candidate for 0.7.5 (point 6,
+  amended 2026-10-30).
 - CONTRACT.md §95 states that a program may connect to vCenter or to an
   ESXi host (contract 0.42).

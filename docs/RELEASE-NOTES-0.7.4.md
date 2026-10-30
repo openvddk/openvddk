@@ -39,10 +39,12 @@ file. Nothing changes for a program that signs in to vCenter.
   VMware's library does use HotAdd there when the worker VM runs on the host
   it signs in to (NET-0005). With `hotadd:nbdssl`, VMware's library reads over
   HotAdd and OpenVDDK over NBDSSL, with the same data. This is recorded in
-  KNOWN-DIFFERENCES. No change is planned: VMware's documentation does not
-  describe HotAdd over a direct host connection, and its programming guide
-  says a host that a vCenter manages is reached through vCenter (D-0052,
-  point 6). Use NBD or NBDSSL on a direct ESXi connection.
+  KNOWN-DIFFERENCES. HotAdd on a standalone ESXi host, with the worker VM on
+  that host, is a candidate for 0.7.5 (D-0052, point 6). Until then, use NBD
+  or NBDSSL on a direct ESXi connection. (Corrected 2026-10-30: this note
+  first said no change was planned because VMware's documentation did not
+  describe HotAdd over a direct host connection. That was wrong: backup
+  products built on VMware's library document it for a standalone host.)
 - **Messages:** a privilege refusal now begins "vSphere refused the
   operation" (it was "vCenter refused the operation"). A missing NFC ticket
   is reported as "the server returned no NFC ticket".

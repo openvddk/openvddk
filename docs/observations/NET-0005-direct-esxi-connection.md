@@ -173,8 +173,9 @@ D-0052, for NBDSSL and NBD on a direct ESXi connection:
 HotAdd on a direct connection is left out of 0.7.4. This is a known
 difference: with `hotadd` alone OpenVDDK fails with 13, and with
 `hotadd:nbdssl` it reads over NBDSSL where the reference reads over HotAdd.
-No change is planned; D-0052 point 6 gives the reason (VMware's
-documentation).
+Support for HotAdd on a standalone ESXi host, with the proxy VM on that
+host, is a candidate for 0.7.5 (D-0052, point 6, amended 2026-10-30: backup
+products built on VMware's library document it).
 
 ## Public or open basis
 
