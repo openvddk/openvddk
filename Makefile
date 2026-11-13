@@ -164,13 +164,20 @@ $(BINDIR)/vixfuncs: tests/consumer/vixfuncs.c include/openvix/vixdisklib_abi.h $
 # library named by VIXTRACE_REAL; `ovxtool tracediff` compares two traces.
 trace: $(OUT)/trace/lib64/$(SONAME)
 
-$(OUT)/trace/lib64/$(SONAME): tests/trace/vixtrace.c include/openvix/vixdisklib_abi.h cabi/libvixDiskLib.map
+# Optional pass-throughs for the reference's three further internal exports,
+# which its own transport plugin needs under the tracer. They live outside
+# the public tree (D-0054); without the file the tracer forwards the 43
+# public functions only.
+TRACE_EXTRA := $(wildcard tools/private/trace/vixtrace-extra.c)
+
+$(OUT)/trace/lib64/$(SONAME): tests/trace/vixtrace.c include/openvix/vixdisklib_abi.h cabi/libvixDiskLib.map $(TRACE_EXTRA)
 	@mkdir -p $(OUT)/trace/lib64
-	@# The library's version map plus the reference's three internal exports,
-	@# which the tracer forwards for the reference's own plugin.
-	sed '/^VIXDISKLIB_6.0 {/,/^}/ s/^    VixDiskLib_Flush;/    VixDiskLib_Flush;\n    VixDiskLib_IsFaultEnabled_Func;\n    VixDiskLib_SetConfigOption;\n    VixDiskLib_SetInjectedFault;/' \
+	@# The library's version map plus the functions named by the JUMP lines of
+	@# TRACE_EXTRA, if there is one, in the VIXDISKLIB_6.0 node as in the reference.
+	sed -n 's/^JUMP(\([A-Za-z0-9_]*\),.*/    \1;/p' /dev/null $(TRACE_EXTRA) > $(OUT)/trace/extra.syms
+	sed -e '/^VIXDISKLIB_6.0 {/,/^}/{' -e '/^  global:$$/r $(OUT)/trace/extra.syms' -e '}' \
 	  cabi/libvixDiskLib.map > $(OUT)/trace/vixtrace.map
-	gcc $(CFLAGS_TEST) -fPIC -shared -o $@ $< -Wl,-soname,$(SONAME) \
+	gcc $(CFLAGS_TEST) -fPIC -shared -o $@ $< $(TRACE_EXTRA) -Wl,-soname,$(SONAME) \
 	  -Wl,--version-script=$(CURDIR)/$(OUT)/trace/vixtrace.map -ldl -lpthread
 	ln -sfn $(SONAME) $(OUT)/trace/lib64/libvixDiskLib.so.8
 	ln -sfn libvixDiskLib.so.8 $(OUT)/trace/lib64/libvixDiskLib.so
@@ -243,9 +250,15 @@ reference-transcript: differential
 	sed -E 's/info\.text="([^"\\]|\\.)*"/info.text=<omitted>/' \
 	  $(OUT)/differential/reference.txt > $(GENERATION)/reference-transcript.txt
 
+# Private: the reference's ELF facts. The public file lists only the
+# manifest's functions among the exports and counts the others (D-0054);
+# the full facts are kept outside the public tree, when that directory exists.
 ref-elf-facts: $(BINDIR)/ovxtool
 	@test -n "$${OPENVIX_REF_DIR:-}" || { echo "OPENVIX_REF_DIR not set"; exit 2; }
-	$(BINDIR)/ovxtool elf-facts $$OPENVIX_REF_DIR/lib64/$(SONAME) > $(GENERATION)/reference-elf.json
+	$(BINDIR)/ovxtool elf-facts -manifest $(GENERATION)/manifest.json \
+	  $$OPENVIX_REF_DIR/lib64/$(SONAME) > $(GENERATION)/reference-elf.json
+	if [ -d tools/private ]; then mkdir -p tools/private/$(GENERATION) && \
+	  $(BINDIR)/ovxtool elf-facts $$OPENVIX_REF_DIR/lib64/$(SONAME) > tools/private/$(GENERATION)/reference-elf.json; fi
 
 # ---- ledger ----------------------------------------------------------------
 

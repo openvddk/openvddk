@@ -271,12 +271,6 @@
       "type": "FUNC"
     },
     {
-      "name": "VixDiskLib_IsFaultEnabled_Func",
-      "version": "VIXDISKLIB_6.0",
-      "default": true,
-      "type": "FUNC"
-    },
-    {
       "name": "VixDiskLib_ListTransportModes",
       "version": "VIXDISKLIB_1.1",
       "default": true,
@@ -325,18 +319,6 @@
       "type": "FUNC"
     },
     {
-      "name": "VixDiskLib_SetConfigOption",
-      "version": "VIXDISKLIB_6.0",
-      "default": true,
-      "type": "FUNC"
-    },
-    {
-      "name": "VixDiskLib_SetInjectedFault",
-      "version": "VIXDISKLIB_6.0",
-      "default": true,
-      "type": "FUNC"
-    },
-    {
       "name": "VixDiskLib_Shrink",
       "version": "VIXDISKLIB_1.0",
       "default": true,
@@ -379,6 +361,7 @@
       "type": "FUNC"
     }
   ],
+  "other_exports": 3,
   "glibc_max": "GLIBC_2.16",
   "bind_now": true,
   "relro": true,

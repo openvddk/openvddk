@@ -2,7 +2,7 @@
 
 - Date: 2026-10-01
 - Contract: §8, §9, §85
-- Status: accepted (corrects revision 0.1, which assumed SONAME `libvixDiskLib.so.8`)
+- Status: accepted (corrects revision 0.1, which assumed SONAME `libvixDiskLib.so.8`); amended by D-0054 (2026-11-14): the withheld symbols are counted, not named
 
 ## Evidence
 
@@ -30,9 +30,9 @@ The primary consumer links the library directly, so its `DT_NEEDED` and
 
   `make abi-gate` compares the built library with
   `abi/vddk-8.0.3/reference-elf.json` and fails on any drift.
-- **Withheld symbols:** `IsFaultEnabled_Func`, `SetConfigOption` and
-  `SetInjectedFault` are exported by the reference but declared in no public
-  header, and their signatures are unknown. They are withheld: a consumer
-  importing them fails at load time instead of calling a guessed signature.
-  They stay `NOT-YET-INVESTIGATED` in the ledger.
+- **Withheld symbols:** three further functions are exported by the
+  reference but declared in no public header, and their signatures are
+  unknown. They are withheld: a consumer importing them fails at load time
+  instead of calling a guessed signature. Since D-0054 they are counted, not
+  named, in the public tree, and no longer listed in the ledger.
 - **Go runtime symbols:** none are exported.

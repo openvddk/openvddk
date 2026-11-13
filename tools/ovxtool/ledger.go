@@ -82,6 +82,11 @@ func renderLedger(w io.Writer, m *Manifest) {
 			cell(f.ThreadSafety), tests, cell(f.AppUses), yesNo(f.AppTested), cell(f.External), f.Status)
 	}
 
+	if m.ReferenceInternalExports > 0 {
+		fmt.Fprintf(w, "\nThe reference library also exports %d further internal functions that no public document "+
+			"describes. This library does not provide them (D-0054).\n", m.ReferenceInternalExports)
+	}
+
 	fmt.Fprintf(w, "\n## Notes and known differences\n\n")
 	for _, f := range m.Functions {
 		if f.Differences == "" && f.Ownership == "" {

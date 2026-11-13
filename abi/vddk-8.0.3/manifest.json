@@ -14,6 +14,7 @@
   ],
   "max_glibc": "2.28",
   "allowed_needed": ["libc.so.6", "libpthread.so.0", "libdl.so.2", "librt.so.1", "libm.so.6", "ld-linux-x86-64.so.2"],
+  "reference_internal_exports": 3,
   "status_legend": [
     "SUPPORTED: semantics implemented and differentially tested against the reference.",
     "PARTIAL: implemented for the documented subset; other inputs fail explicitly.",
@@ -365,30 +366,6 @@
       "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "no", "hosted_disk": "not investigated", "thread_safety": "n/a",
       "differential_tests": ["args.checkrepair-null"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
       "known_differences": "Unknown connection or NULL file name: VIX_E_INVALID_ARG, as in the reference; otherwise VIX_E_NOT_SUPPORTED."
-    },
-    {
-      "name": "VixDiskLib_IsFaultEnabled_Func", "version": "VIXDISKLIB_6.0", "exported": false,
-      "signature": "unknown (reference-internal, no public declaration)",
-      "ownership": "",
-      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "n/a",
-      "differential_tests": ["symbols"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
-      "known_differences": "Exported by the reference only; not exported here."
-    },
-    {
-      "name": "VixDiskLib_SetConfigOption", "version": "VIXDISKLIB_6.0", "exported": false,
-      "signature": "unknown (reference-internal, no public declaration)",
-      "ownership": "",
-      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "n/a",
-      "differential_tests": ["symbols"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
-      "known_differences": "Exported by the reference only; not exported here."
-    },
-    {
-      "name": "VixDiskLib_SetInjectedFault", "version": "VIXDISKLIB_6.0", "exported": false,
-      "signature": "unknown (reference-internal, no public declaration)",
-      "ownership": "",
-      "status": "NOT-YET-INVESTIGATED", "semantics": "none", "managed_disk": "n/a", "hosted_disk": "n/a", "thread_safety": "n/a",
-      "differential_tests": ["symbols"], "app_uses": "no", "app_exercised": false, "external_consumer_exercised": "",
-      "known_differences": "Exported by the reference only; not exported here."
     }
   ]
 }

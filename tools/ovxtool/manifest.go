@@ -12,16 +12,22 @@ import (
 
 // Manifest is the machine-readable ABI manifest and compatibility ledger
 // for one VixDiskLib generation (CONTRACT.md sections 10 and 48).
+//
+// Functions lists the reference's public functions. The reference exports
+// ReferenceInternalExports further internal functions that no public
+// document describes; they are counted, not named, and not provided
+// (D-0054).
 type Manifest struct {
-	Schema        int        `json:"schema"`
-	Generation    string     `json:"generation"`
-	Reference     Reference  `json:"reference"`
-	Soname        string     `json:"soname"`
-	Links         []Link     `json:"links"`
-	MaxGlibc      string     `json:"max_glibc"`
-	AllowedNeeded []string   `json:"allowed_needed"`
-	StatusLegend  []string   `json:"status_legend"`
-	Functions     []Function `json:"functions"`
+	Schema                   int        `json:"schema"`
+	Generation               string     `json:"generation"`
+	Reference                Reference  `json:"reference"`
+	Soname                   string     `json:"soname"`
+	Links                    []Link     `json:"links"`
+	MaxGlibc                 string     `json:"max_glibc"`
+	AllowedNeeded            []string   `json:"allowed_needed"`
+	ReferenceInternalExports int        `json:"reference_internal_exports"`
+	StatusLegend             []string   `json:"status_legend"`
+	Functions                []Function `json:"functions"`
 }
 
 type Reference struct {
@@ -80,6 +86,9 @@ func loadManifest(path string) (*Manifest, error) {
 func (m *Manifest) validate() error {
 	if m.Schema != 1 {
 		return fmt.Errorf("unsupported schema %d", m.Schema)
+	}
+	if m.ReferenceInternalExports < 0 {
+		return fmt.Errorf("reference_internal_exports %d is negative", m.ReferenceInternalExports)
 	}
 	seen := map[string]bool{}
 	for _, f := range m.Functions {

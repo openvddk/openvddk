@@ -10,7 +10,7 @@ This library is not a complete VixDiskLib replacement. Only rows marked SUPPORTE
 
 | Status | Functions |
 |---|---|
-| NOT-YET-INVESTIGATED | 13 |
+| NOT-YET-INVESTIGATED | 10 |
 | PARTIAL | 19 |
 | PLANNED | 1 |
 | SUPPORTED | 8 |
@@ -71,9 +71,8 @@ Status meanings:
 | `VixDiskLib_Attach` | VIXDISKLIB_1.0 | yes | none | no | not investigated | n/a | `args.attach-null` | no | no | — | **NOT-YET-INVESTIGATED** |
 | `VixDiskLib_SpaceNeededForClone` | VIXDISKLIB_1.0 | yes | none | no | not investigated | n/a | `args.spaceneededforclone-null` | no | no | — | **NOT-YET-INVESTIGATED** |
 | `VixDiskLib_CheckRepair` | VIXDISKLIB_1.1 | yes | none | no | not investigated | n/a | `args.checkrepair-null` | no | no | — | **NOT-YET-INVESTIGATED** |
-| `VixDiskLib_IsFaultEnabled_Func` | VIXDISKLIB_6.0 | no | none | n/a | n/a | n/a | `symbols` | no | no | — | **NOT-YET-INVESTIGATED** |
-| `VixDiskLib_SetConfigOption` | VIXDISKLIB_6.0 | no | none | n/a | n/a | n/a | `symbols` | no | no | — | **NOT-YET-INVESTIGATED** |
-| `VixDiskLib_SetInjectedFault` | VIXDISKLIB_6.0 | no | none | n/a | n/a | n/a | `symbols` | no | no | — | **NOT-YET-INVESTIGATED** |
+
+The reference library also exports 3 further internal functions that no public document describes. This library does not provide them (D-0054).
 
 ## Notes and known differences
 
@@ -361,22 +360,4 @@ Status meanings:
 `VixError VixDiskLib_CheckRepair(const VixDiskLibConnection connection, const char *filename, VixDiskLibBool repair)`
 
 - Known differences: Unknown connection or NULL file name: VIX_E_INVALID_ARG, as in the reference; otherwise VIX_E_NOT_SUPPORTED.
-
-### `VixDiskLib_IsFaultEnabled_Func`
-
-`unknown (reference-internal, no public declaration)`
-
-- Known differences: Exported by the reference only; not exported here.
-
-### `VixDiskLib_SetConfigOption`
-
-`unknown (reference-internal, no public declaration)`
-
-- Known differences: Exported by the reference only; not exported here.
-
-### `VixDiskLib_SetInjectedFault`
-
-`unknown (reference-internal, no public declaration)`
-
-- Known differences: Exported by the reference only; not exported here.
 

@@ -119,6 +119,8 @@ func cmdABIGate(args []string) error {
 	}
 	sort.Strings(extra)
 	g.check(len(manifestDrift) == 0, "manifest matches reference", strings.Join(manifestDrift, " "))
+	g.check(ref.OtherExports == m.ReferenceInternalExports, "reference internal exports",
+		fmt.Sprintf("%d counted, manifest says %d", ref.OtherExports, m.ReferenceInternalExports))
 	g.check(len(missing) == 0, "required exports present",
 		fmt.Sprintf("%d expected; missing: %s", len(expected), strings.Join(missing, " ")))
 	g.check(len(wrongVersion) == 0, "export version binding", strings.Join(wrongVersion, " "))

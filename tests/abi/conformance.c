@@ -101,7 +101,7 @@ static void rec_str(const char *step, const char *key, const char *s)
 struct sym {
    const char *name;
    const char *version;
-   int internal; /* reference-only, not in the public declarations */
+   int internal; /* reference-only; none listed: the reference's internal exports are not named publicly (D-0054) */
 };
 
 static const struct sym k_syms[] = {
@@ -148,9 +148,6 @@ static const struct sym k_syms[] = {
    {"VixDiskLib_AllocateConnectParams", "VIXDISKLIB_6.7", 0},
    {"VixDiskLib_FreeBlockList", "VIXDISKLIB_6.7", 0},
    {"VixDiskLib_QueryAllocatedBlocks", "VIXDISKLIB_6.7", 0},
-   {"VixDiskLib_IsFaultEnabled_Func", "VIXDISKLIB_6.0", 1},
-   {"VixDiskLib_SetConfigOption", "VIXDISKLIB_6.0", 1},
-   {"VixDiskLib_SetInjectedFault", "VIXDISKLIB_6.0", 1},
 };
 
 static void *need(const char *name)

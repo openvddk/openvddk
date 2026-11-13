@@ -46,27 +46,16 @@ static unsigned long seq;
 static __thread int depth; /* calls the real library makes back into us are not recorded */
 
 /*
- * The reference exports three functions for its own tooling, which this
- * project does not implement (COMPATIBILITY.md). Its transport plugin looks
- * them up by name in the library it was loaded for, which is this one. Each
- * is a jump to the real library's function: arguments and result pass
- * through untouched, whatever they are, and the call is not recorded.
+ * The reference exports three further internal functions that no public
+ * document describes; this project does not provide them (D-0054). The
+ * reference's transport plugin looks them up by name in the library it was
+ * loaded for, which is this one. A build may add pass-throughs for them
+ * from a file outside the public tree (TRACE_EXTRA in the Makefile); that
+ * file defines vixtrace_extra_setup, which fills them in once the real
+ * library is loaded. Without it, the reference's transport plugin does not
+ * work under the tracer; tracing this project's library is not affected.
  */
-void *vixtrace_fwd_IsFaultEnabled __attribute__((visibility("hidden")));
-void *vixtrace_fwd_SetConfigOption __attribute__((visibility("hidden")));
-void *vixtrace_fwd_SetInjectedFault __attribute__((visibility("hidden")));
-
-#define JUMP(name, ptr)                    \
-   __asm__(".text\n"                       \
-           ".globl " #name "\n"            \
-           ".type " #name ",@function\n"   \
-           #name ":\n"                     \
-           "  jmp *" #ptr "(%rip)\n"       \
-           ".size " #name ",.-" #name "\n")
-
-JUMP(VixDiskLib_IsFaultEnabled_Func, vixtrace_fwd_IsFaultEnabled);
-JUMP(VixDiskLib_SetConfigOption, vixtrace_fwd_SetConfigOption);
-JUMP(VixDiskLib_SetInjectedFault, vixtrace_fwd_SetInjectedFault);
+void vixtrace_extra_setup(void *lib) __attribute__((weak, visibility("hidden")));
 
 static void setup(void)
 {
@@ -83,12 +72,9 @@ static void setup(void)
       fprintf(stderr, "vixtrace: %s\n", dlerror());
       abort();
    }
-   /* Absent in this project's library: a call then jumps to address 0 and
-    * crashes, as a call to a missing function would; nothing calls them
-    * except the reference's own plugin. */
-   vixtrace_fwd_IsFaultEnabled = dlsym(real, "VixDiskLib_IsFaultEnabled_Func");
-   vixtrace_fwd_SetConfigOption = dlsym(real, "VixDiskLib_SetConfigOption");
-   vixtrace_fwd_SetInjectedFault = dlsym(real, "VixDiskLib_SetInjectedFault");
+   if (vixtrace_extra_setup != NULL) {
+      vixtrace_extra_setup(real);
+   }
    const char *h = getenv("VIXTRACE_HASH");
    hashing = !(h != NULL && strcmp(h, "0") == 0);
    libdir_override = getenv("VIXTRACE_LIBDIR");

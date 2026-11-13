@@ -41,9 +41,6 @@ case=symbols sym=VixDiskLib_Wait internal=0 default=1 versioned=1 same=1
 case=symbols sym=VixDiskLib_AllocateConnectParams internal=0 default=1 versioned=1 same=1
 case=symbols sym=VixDiskLib_FreeBlockList internal=0 default=1 versioned=1 same=1
 case=symbols sym=VixDiskLib_QueryAllocatedBlocks internal=0 default=1 versioned=1 same=1
-case=symbols sym=VixDiskLib_IsFaultEnabled_Func internal=1 default=1 versioned=1 same=1
-case=symbols sym=VixDiskLib_SetConfigOption internal=1 default=1 versioned=1 same=1
-case=symbols sym=VixDiskLib_SetInjectedFault internal=1 default=1 versioned=1 same=1
 case=symbols status=exit:0
 case=listmodes.preinit step=ListTransportModes value=null
 case=listmodes.preinit status=exit:0

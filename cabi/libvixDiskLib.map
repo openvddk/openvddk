@@ -10,9 +10,8 @@
  * DT_VERNEED, so the binding is part of the ABI. Everything else, including
  * the Go runtime and the cgo bridge, stays local.
  *
- * The three reference-internal exports (SetConfigOption, SetInjectedFault,
- * IsFaultEnabled_Func) are deliberately absent until investigated; see
- * COMPATIBILITY.md.
+ * The reference exports three further internal functions that no public
+ * document describes; they are not provided (D-0054).
  */
 
 VIXDISKLIB_1.0 {

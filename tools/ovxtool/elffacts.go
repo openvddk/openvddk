@@ -7,6 +7,7 @@ import (
 	"debug/elf"
 	"encoding/json"
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -16,24 +17,27 @@ import (
 )
 
 // Facts are the externally observable ABI properties of a shared object.
+// The public form (publicFacts) lists only the manifest's functions among
+// the exports and counts the others in OtherExports (D-0054).
 type Facts struct {
-	File        string   `json:"file"`
-	Class       string   `json:"class"`
-	Machine     string   `json:"machine"`
-	Type        string   `json:"type"`
-	Soname      string   `json:"soname"`
-	Needed      []string `json:"needed"`
-	Rpath       string   `json:"rpath,omitempty"`
-	Runpath     string   `json:"runpath,omitempty"`
-	VersionDefs []VerDef `json:"version_definitions"`
-	Exports     []Export `json:"exports"`
-	GlibcMax    string   `json:"glibc_max"`
-	BindNow     bool     `json:"bind_now"`
-	Relro       bool     `json:"relro"`
-	ExecStack   bool     `json:"exec_stack"`
-	TextRel     bool     `json:"textrel"`
-	StaticTLS   bool     `json:"static_tls"`
-	NoDelete    bool     `json:"nodelete"`
+	File         string   `json:"file"`
+	Class        string   `json:"class"`
+	Machine      string   `json:"machine"`
+	Type         string   `json:"type"`
+	Soname       string   `json:"soname"`
+	Needed       []string `json:"needed"`
+	Rpath        string   `json:"rpath,omitempty"`
+	Runpath      string   `json:"runpath,omitempty"`
+	VersionDefs  []VerDef `json:"version_definitions"`
+	Exports      []Export `json:"exports"`
+	OtherExports int      `json:"other_exports,omitempty"`
+	GlibcMax     string   `json:"glibc_max"`
+	BindNow      bool     `json:"bind_now"`
+	Relro        bool     `json:"relro"`
+	ExecStack    bool     `json:"exec_stack"`
+	TextRel      bool     `json:"textrel"`
+	StaticTLS    bool     `json:"static_tls"`
+	NoDelete     bool     `json:"nodelete"`
 }
 
 // VerDef is one symbol-version definition.
@@ -51,17 +55,51 @@ type Export struct {
 	Type    string `json:"type"`
 }
 
+// cmdElfFacts writes the ELF facts of LIB. With -manifest it writes the
+// public form (D-0054).
 func cmdElfFacts(args []string) error {
-	if len(args) != 1 {
-		return errors.New("usage: elf-facts LIB")
+	fs := flag.NewFlagSet("elf-facts", flag.ContinueOnError)
+	manifestPath := fs.String("manifest", "", "write the public form: only this manifest's functions among the exports, the others counted")
+	if err := fs.Parse(args); err != nil {
+		return err
 	}
-	f, err := elfFacts(args[0])
+	if fs.NArg() != 1 {
+		return errors.New("usage: elf-facts [-manifest M] LIB")
+	}
+	f, err := elfFacts(fs.Arg(0))
 	if err != nil {
 		return err
+	}
+	if *manifestPath != "" {
+		m, err := loadManifest(*manifestPath)
+		if err != nil {
+			return err
+		}
+		f = publicFacts(f, m)
 	}
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
 	return enc.Encode(f)
+}
+
+// publicFacts returns the form of f kept in the public tree (D-0054): the
+// exports the manifest lists, with their version bindings; the others are
+// counted, not named. Version definitions are kept.
+func publicFacts(f *Facts, m *Manifest) *Facts {
+	listed := map[string]bool{}
+	for _, fn := range m.Functions {
+		listed[fn.Name] = true
+	}
+	r := *f
+	r.Exports = nil
+	for _, e := range f.Exports {
+		if !listed[e.Name] {
+			r.OtherExports++
+			continue
+		}
+		r.Exports = append(r.Exports, e)
+	}
+	return &r
 }
 
 func elfFacts(path string) (*Facts, error) {

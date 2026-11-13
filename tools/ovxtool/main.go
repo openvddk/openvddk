@@ -3,7 +3,8 @@
 
 // Command ovxtool holds the project's ABI and conformance tooling:
 //
-//	ovxtool elf-facts LIB                 machine-readable ELF/ABI facts
+//	ovxtool elf-facts [-manifest M] LIB   machine-readable ELF/ABI facts; with
+//	                                      -manifest the public form (D-0054)
 //	ovxtool abi-gate -manifest M -reference R -libdir DIR
 //	ovxtool layout-check -expected E CANDIDATE.json
 //	ovxtool conform-diff -expect X REFERENCE.txt CANDIDATE.txt

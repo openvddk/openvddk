@@ -3,7 +3,7 @@
 - Date: 2026-11-11
 - Contract: §50
 - Status: accepted by the maintainer on 2026-11-11, after a review of every item of the public interface. Item 5
-  (the terms) added on 2026-11-13.
+  (the terms) added on 2026-11-13. Item 3 amended by D-0054 on 2026-11-14.
 
 ## Context
 
@@ -50,9 +50,9 @@ No header text, code or comment was reproduced. Nothing was decompiled or disass
    PROVENANCE.md says what they named before.
 2. The linking facts stay. Binary compatibility needs them, and anyone can read them with standard tools from the
    library VMware distributed.
-3. The three internal exports (`IsFaultEnabled_Func`, `SetConfigOption`, `SetInjectedFault`) stay recorded under
-   `abi/`. The tracer keeps forwarding them, because VMware's own library needs them when the tracer sits in front of
-   it. OpenVDDK itself does not export them (D-0008).
+3. The three internal exports are counted, not named, in the public tree since D-0054; their names are recorded
+   privately. A private build of the tracer keeps forwarding them, because VMware's own library needs them when the
+   tracer sits in front of it. OpenVDDK itself does not export them (D-0008).
 4. **The reference packages.** The maintainer downloaded them from VMware's public download page; until August 2026 it
    required no account. The terms that came with them are VMware's General Terms of 22 November 2023, shipped in the
    8.0.3 package as `doc/vmware-general-terms.pdf`. Their section 4.2 excludes publicly available information from

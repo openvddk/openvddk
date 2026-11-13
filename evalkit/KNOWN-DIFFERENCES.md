@@ -86,9 +86,8 @@ deliberate and has a reason.
   none of them returns success without doing its work. Reading metadata
   (`GetMetadataKeys`, `ReadMetadata`) works as in VMware's library;
   `WriteMetadata` returns `VIX_E_FILE_READ_ONLY`.
-- **Three internal symbols** that VMware's library exports for its own
-  tooling (`VixDiskLib_IsFaultEnabled_Func`, `VixDiskLib_SetConfigOption`,
-  `VixDiskLib_SetInjectedFault`) are not exported.
+- **Three internal functions** that VMware's library exports for its own
+  tooling, and that no public document describes, are not exported.
 - **Programs built against VDDK 7.** They run with OpenVDDK through a link
   named after the file they were built against (for VDDK 7.0.3,
   `libvixDiskLib.so.7.0.3`), and get VDDK 8.0.3's answers. Such a link is a

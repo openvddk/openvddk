@@ -33,8 +33,9 @@
 - **Exports:** 46 defined `FUNC` symbols, all `VixDiskLib_*` and all default
   versions, with no other text exports.
   - 43 are declared in the public header.
-  - Three are not: `IsFaultEnabled_Func`, `SetConfigOption` and
-    `SetInjectedFault`, all `@VIXDISKLIB_6.0`.
+  - Three are not: internal functions that no public document describes,
+    all bound to `VIXDISKLIB_6.0`. Since D-0054 the public tree counts them
+    without naming them; the full record is kept privately.
   - The per-symbol bindings are in `abi/vddk-8.0.3/manifest.json`.
 - **Layout:** compiled with GCC 8.5 on LP64, the public declarations give
   `ConnectParams` 128 bytes, `Info` 64, `CreateParams` 32, `Geometry` 12,
