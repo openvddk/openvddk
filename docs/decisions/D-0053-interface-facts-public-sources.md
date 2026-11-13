@@ -2,7 +2,8 @@
 
 - Date: 2026-11-11
 - Contract: §50
-- Status: accepted by the maintainer on 2026-11-11, after a review of every item of the public interface.
+- Status: accepted by the maintainer on 2026-11-11, after a review of every item of the public interface. Item 5
+  (the terms) added on 2026-11-13.
 
 ## Context
 
@@ -16,9 +17,11 @@ On 2026-11-11, 421 items of OpenVDDK's public interface were matched against pub
 types, 57 constants, 266 error codes and 27 facts about the library file.
 
 - **400 items have a public source.**
-  - Broadcom's open-source open-vm-tools (`lib/include/vix.h`, `lib/include/vm_basic_types.h`, LGPL-2.1) has every
-    error code with its value, and every basic type name. `vm_basic_types.h` is the marked header in question;
-    Broadcom publishes it as open source.
+  - Broadcom's open-source open-vm-tools has every error code with its value (`lib/include/vix.h`, LGPL-2.1) and
+    every basic type name (`lib/include/vm_basic_types.h`). `vm_basic_types.h` is the marked header in question;
+    Broadcom publishes it as open source. It carries three licence notices: LGPL-2.1, a BSD-style licence with two
+    conditions, and CDDL-1.0. This record draws no conclusion about how they relate. OpenVDDK takes only facts from
+    these files (names and values), never their text.
   - The API reference VMware ships with VDDK has 33 of the 43 prototypes and the error list.
   - VMware's *VDDK Programming Guide* (8.0 U3) has the datastore specification and the sector size.
   - nbdkit's VDDK plugin has the structure layouts, enumerations, open flags and limits.
@@ -54,10 +57,29 @@ No header text, code or comment was reproduced. Nothing was decompiled or disass
    required no account. The terms that came with them are VMware's General Terms of 22 November 2023, shipped in the
    8.0.3 package as `doc/vmware-general-terms.pdf`. Their section 4.2 excludes publicly available information from
    the confidentiality duty.
+5. **What the terms say about examining the library** (added 2026-11-13, after the same contributor asked).
+   - The General Terms make the agreement the order, the General Terms, the Exhibits and the Offering-specific Notes
+     (section 1.1). The General Terms themselves have no clause about examining the software.
+   - The restriction is in VMware's Software Exhibit of the same date (version "Nov 2023"). The Exhibit applies when
+     software is bought, and the General Terms define the software as programs licensed under an order. Its section
+     2(d) forbids attempts to "reverse engineer, decompile, or otherwise attempt to derive source code", except where
+     the law permits.
+   - The Offering-specific Notes are VMware's Product Guide. Its November 2023 version, the one published when the
+     General Terms above were dated, has no entry for VDDK or the vSphere SDKs, and neither do the December 2023 and
+     April 2024 versions. Its free-software section lists other tools. Its clause on APIs, which also excludes reverse
+     engineering, sits in the Workstation and Fusion sections and covers the VIX API kit those desktop products
+     include. Its section 1.2 ties the applicable version to the date VMware accepts an order.
+   - The reference packages were free downloads. There was no order and no purchase.
+   - No step of OpenVDDK's work sought source code. The dynamic tables were read as the system's loader reads them,
+     and the library's behaviour was learned by running it and observing the results. OpenVDDK reproduces behaviour,
+     not code.
+   - The maintainer's assessment: these terms do not restrict this work. The versions cited are the ones that came
+     with the package.
 
 ## Sources (checked 2026-11-11; every link answered)
 
-- Broadcom's open-vm-tools, LGPL-2.1, pinned at commit `1634dfb42f72` (2026-05-14). The first file is the same header
+- Broadcom's open-vm-tools, pinned at commit `1634dfb42f72` (2026-05-14); `vix.h` carries the LGPL-2.1 notice,
+  `vm_basic_types.h` the three notices named above. The first file is the same header
   that carries the "VMware Confidential" marking in VDDK's package; here Broadcom publishes it as open source.
   - `vm_basic_types.h`: https://github.com/vmware/open-vm-tools/blob/1634dfb42f72/open-vm-tools/lib/include/vm_basic_types.h
   - `vix.h` (every VIX error code and its value): https://github.com/vmware/open-vm-tools/blob/1634dfb42f72/open-vm-tools/lib/include/vix.h
@@ -72,4 +94,15 @@ No header text, code or comment was reproduced. Nothing was decompiled or disass
 - The API reference VMware ships with VDDK: the `doc/` folder of `VMware-vix-disklib-8.0.3-23950268.x86_64.tar.gz`.
 - The terms that came with the reference package: VMware General Terms, version of 22 November 2023, in the same
   package as `doc/vmware-general-terms.pdf`. Section 4.2 (Exceptions) says the confidentiality duty does not apply to
-  information that "becomes publicly available through no fault of Recipient".
+  information that "becomes publicly available through no fault of Recipient". The file's SHA-256 is
+  `7ca6efae3eab3336e76dada258fafe808e0601d4ae7e5044ef1fff14be8d6758`.
+- VMware's Software Exhibit to the General Terms, version "Nov 2023", as archived by the Internet Archive on
+  2024-03-28 (read 2026-11-13):
+  https://web.archive.org/web/20240328224057/https://www.vmware.com/content/dam/digitalmarketing/vmware/en/pdf/agreements/vmware-software-exhibit.pdf
+  The archived file's SHA-256 is `947634c3db43544a85557e3adb73abf65fe8ab5ecdf4d4dbde90f10c35b128cb`.
+- VMware's Product Guide (the Offering-specific Notes), version "November 2023", as archived on 2023-11-10 (read
+  2026-11-13; the December 2023 and April 2024 versions, archived 2024-01-27 and 2024-03-31, were checked too):
+  https://web.archive.org/web/20231110180025/https://www.vmware.com/content/dam/digitalmarketing/vmware/en/pdf/product/vmware-product-guide.pdf
+  The archived file's SHA-256 is `c15f91776220c853e9f6de1679e26f5d6bf1b08a3dd17a336e428c5c26a49fbe`.
+- The maintainer keeps a copy of each of these documents, so they can be checked against the values above if a link
+  stops working.
