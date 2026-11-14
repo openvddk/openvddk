@@ -91,6 +91,9 @@ No header text, code or comment was reproduced. Nothing was decompiled or disass
   https://web.archive.org/web/20140126070219/https://www.vmware.com/support/developer/vix-api/vix112_reference/errors/errors.html
 - VMware's *NAS VAAI Development Kit 7.0.1* API reference, as posted publicly by NetApp:
   https://opensource.netapp.com/NetApp_NFS_Plug-in_for_VMware_VAAI/2.0.1/rpmextract/nvdk-7.0.1-16850804/docs/html/distribute__vixDiskLib_8h.html
+  Archived on 2026-11-14 (the header page itself is archived as `distribute__vixDiskLib_8h-source.html` beside it):
+  https://web.archive.org/web/20261114002818/https://opensource.netapp.com/NetApp_NFS_Plug-in_for_VMware_VAAI/2.0.1/rpmextract/nvdk-7.0.1-16850804/docs/html/distribute__vixDiskLib_8h.html
+  The maintainer also keeps a copy of these pages.
 - The API reference VMware ships with VDDK: the `doc/` folder of `VMware-vix-disklib-8.0.3-23950268.x86_64.tar.gz`.
 - The terms that came with the reference package: VMware General Terms, version of 22 November 2023, in the same
   package as `doc/vmware-general-terms.pdf`. Section 4.2 (Exceptions) says the confidentiality duty does not apply to
