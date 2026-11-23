@@ -43,8 +43,26 @@ SessionComplete in place of an AIO reply is named as the host ending the
 session. Tests: `TestNFCVersion5GetsNoFeaturesOrResourcePool`,
 `TestHandshakeErrorNamesStepAndVersion`.
 
-## Not verified yet
+## Verified after the change
 
-A run against a real 7.0 GA host with the 0.7.5 candidate (offered by the
-reporter), and an unchanged handshake on 7.0 Update 3, 8.0 and 9.1.1 in our
-own lab.
+- **On a real ESXi 7.0 GA host, 2026-11-23.** The reporter ran the released
+  0.7.5 on their standalone ESXi 7.0.0 GA host (build 15843807, evaluation
+  licence) and posted the results on openvddk/openvddk#1
+  (https://github.com/openvddk/openvddk/issues/1#issuecomment-7093609781):
+  - `Open` and a whole-disk read of both disks of the test VM over NBD and
+    NBDSSL: all four reads succeeded, with the same SHA-256 as VMware's
+    library on the same host; the log names the host's NFC version 5;
+  - a complete warm migration from that host (a full copy with changed block
+    tracking, a delta pass and the cutover) finished, with the target disks
+    identical to the source;
+  - as a regression check, vCenter 8.0.3 with a '+' in the datastore path
+    and a standalone ESXi 8.0.3 host read the same bytes over both transports.
+- **An unchanged handshake** for the hosts that answer NFC version 2, 9, 11
+  and 12 (6.7, 7.0 Update 3, 8.0.3 and 9.1.1), in our own labs: the release
+  checks of 0.7.5 (NBD-0035).
+
+## Still not verified
+
+- A 7.0 GA host in our own lab (we have none), and HotAdd on 7.0 GA (not
+  part of the reporter's run).
+- ESXi 7.0 Update 1 and Update 2.

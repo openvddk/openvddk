@@ -12,9 +12,7 @@
 - **Reference:** VMware VDDK 8.0.3 (`afa97c62…`), the only reference
   (D-0046).
 - **Date:** 2026-11-22.
-- **Evidence:** (evidence kept privately),
-  (evidence kept privately) and (evidence kept privately)
-  (kept privately).
+- **Evidence:** (evidence kept privately).
 
 ## Results
 
@@ -48,17 +46,34 @@ rc2 (main `b1a317c`, library `d4214bf10c451a1a…`, three identical builds)
 changes only the text of the skipped-HotAdd line ("HotAdd is available only
 through vCenter, not on a direct connection to an ESXi host. Trying the next
 listed transport: nbdssl.") and the KNOWN-DIFFERENCES entry on HotAdd over a
-direct ESXi connection. On 9.1.1 (2026-11-22, evidence
-(evidence kept privately), kept privately): the six whole reads through
+direct ESXi connection. On 9.1.1 on 2026-11-22
+(evidence kept privately): the six whole reads through
 vCenter (NFS and VMFS over HotAdd, NBDSSL and NBD) returned the golden hash
 with NFC version 12; the direct ESXi connection with `hotadd:nbdssl:nbd`
 logged that line once and read over NBDSSL; the reader kept only its own disk
 and both temporary snapshots were removed.
 
+## The release build
+
+Built from commit `d7262efa169c` of the public repository (the head of
+openvddk/openvddk#6, the exported form of main `94b9926`) in the pinned builder:
+`make runtime` (with the full check and three identical builds), `make devkit`
+and `make sbom` passed; library `d8256c7a19712a27…`, 23,743,120 bytes; the
+runtime kit has the `lib64` link and its fixed-name copy is identical. On 9.1.1
+on 2026-11-22 (evidence kept privately)
+the library reported `OpenVDDK 0.7.5 (d7262efa169c)`; the six whole reads
+through vCenter returned the golden hash; the direct ESXi connection logged
+the skipped HotAdd on the log callback (not as a warning) and read over
+NBDSSL; the reader kept only its own disk and both temporary snapshots were
+removed.
+
 ## Not covered
 
 - ESXi 7.0 GA (NFC version 5): no such host of ours; the reporter of
-  openvddk/openvddk#1 offered to run the candidate.
+  openvddk/openvddk#1 offered to run the candidate. *Update 2026-11-23:* the
+  reporter ran the released 0.7.5 on their 7.0 GA host: NBD and NBDSSL read
+  the same bytes as VMware's library, and a warm migration from that host
+  finished (NBD-0032). HotAdd on 7.0 GA was not part of that run.
 - ESXi 7.0 Update 1 and Update 2.
 - HotAdd through a reader that is itself encrypted.
 - The read rates in the evidence are not a speed comparison: the fixtures

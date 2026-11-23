@@ -1,4 +1,4 @@
-# Compatibility matrix — OpenVDDK 0.7.4
+# Compatibility matrix — OpenVDDK 0.7.5
 
 Where OpenVDDK has been tested, and with what. "Verified" means compared
 with VMware's library on the same inputs, with identical data and the same
@@ -6,8 +6,10 @@ answers, in the records named (docs/observations/). Function-level ABI
 coverage is in `COMPATIBILITY.md`; the full test lists are
 `docs/HOTADD-QUALIFICATION.md` and `docs/NBD-QUALIFICATION.md`.
 
-Status: 2026-10-29, 0.7.4 (released 2026-10-29 from `main`; signing in to an ESXi
-host directly is new in 0.7.4, the other rows were last changed for 0.7.1). The HotAdd-only
+Status: 2026-11-23, 0.7.5 (released 2026-11-22 from `main`). Changed since
+0.7.4: vSphere 9.1.1 (tested after 0.7.4 was released), encrypted VMs over NBD
+(0.7.5), and ESXi 7.0 GA, verified on 0.7.5 by the reporter of
+openvddk/openvddk#1 on 2026-11-23. Signing in to an ESXi host directly is new in 0.7.4. The HotAdd-only
 line (`release/hotadd`, 0.6.x) is retired (D-0044).
 
 ## Interface and platform
@@ -27,6 +29,7 @@ line (`release/hotadd`, 0.6.x) is retired (D-0044).
 | 9.1.1 | vCenter b25712839, ESXi b25714478 | verified through vCenter: changed blocks (CBT) and whole disks read the same bytes as VDDK 8.0.3 (2026-11-02) | verified, through vCenter and directly on a standalone ESXi host (same check) | verified (same check) | VDDK 8.0.3 |
 | 8.0.3 | vCenter b25600417, ESXi b25595708 | verified (the ENV-80 rows of HOTADD-QUALIFICATION) | verified (NBD-0006, NBD-0007) | verified (NBD-0006, NBD-0007) | VDDK 8.0.3 |
 | 7.0.3 | vCenter b20990077 with ESXi b20328353; vCenter b19234570 with ESXi 7.0 U3c b19193900 | verified (the ENV-70A and ENV-70B rows of HOTADD-QUALIFICATION; HOTADD-0047 to -0051) | verified (NBD-0001 to -0004, -0009 to -0013) | verified (same) | VDDK 8.0.3 |
+| 7.0 GA | ESXi 7.0.0 b15843807, standalone (no vCenter): the host of the reporter of openvddk/openvddk#1, with 0.7.5 | not tested | verified by the reporter: whole reads of both disks of a test VM with the same SHA-256 as VMware's library on the same host, the host's NFC version 5 in the log, and a complete warm migration from that host (2026-11-23; [openvddk/openvddk#1](https://github.com/openvddk/openvddk/issues/1#issuecomment-7093609781), NBD-0032) | verified (same) | VMware's library (the reporter's) |
 | 6.7 Update 3 | vCenter b17137327 and b16046713 with ESXi b14320388 | verified (HOTADD-0045 to -0047) | verified (NBD-0005, -0008, -0010, -0011) | verified (same) | VDDK 8.0.3 since 2026-10-26 (D-0046; virt-v2v and HotAdd failed-Open rechecked, NBD-0029); VDDK 7.0.3 before |
 | 6.5 and older | — | not supported for now | not supported | not supported | — |
 
@@ -36,6 +39,7 @@ line (`release/hotadd`, 0.6.x) is retired (D-0044).
 |---|---|---|---|---|
 | vCenter | verified (above) | verified (above) | verified (above) | above |
 | An ESXi host directly, from 0.7.4: ESXi 6.7 U3 b14320388 and 7.0 U3c b19193900 (managed by a vCenter, and 7.0 also with no vCenter managing it) | not used by OpenVDDK on such a connection; VMware's library uses it when the worker runs on that host (a known difference, D-0052) | verified (NBD-0031) | verified (NBD-0031) | NET-0005, D-0052 |
+| An ESXi 7.0.0 GA b15843807 host that no vCenter manages, from 0.7.5 (the reporter's host) | not used (as above) | verified by the reporter | verified by the reporter | NBD-0032, [openvddk/openvddk#1](https://github.com/openvddk/openvddk/issues/1#issuecomment-7093609781) |
 | An ESXi 8.0.3 b24677879 host that no vCenter manages | not used (as above) | verified (NBD-0031) | verified (NBD-0031) | NET-0005; with the "vSphere 8 Hypervisor" licence the host refuses API writes, and reads, allocation queries and the access calls work with both libraries |
 
 On a direct connection the program names the VM and the snapshot by the
