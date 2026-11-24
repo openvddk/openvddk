@@ -68,7 +68,10 @@ file. The exported interface (ABI) is unchanged.
   reporter ran 0.7.5 on their ESXi 7.0 GA host (build 15843807): NBD and
   NBDSSL read the same bytes as VMware's library, and a complete warm
   migration from that host finished (openvddk/openvddk#1, NBD-0032). HotAdd
-  on 7.0 GA was not part of that run.
+  on 7.0 GA was not part of that run. *Update 2026-11-23, later:* we ran
+  0.7.5 on a 7.0 GA host of our own, directly and through vCenter 7.0.3:
+  HotAdd, NBDSSL and NBD gave the same data and answers as VDDK 8.0.3 on NFS
+  and VMFS, including changed blocks and virt-v2v (NBD-0032).
 - ESXi 7.0 Update 1 and Update 2: their NFC versions are not recorded.
 - SAN, local VMDK files and writing, as before.
 

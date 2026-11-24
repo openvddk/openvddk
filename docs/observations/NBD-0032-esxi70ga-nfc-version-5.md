@@ -57,12 +57,38 @@ session. Tests: `TestNFCVersion5GetsNoFeaturesOrResourcePool`,
     identical to the source;
   - as a regression check, vCenter 8.0.3 with a '+' in the datastore path
     and a standalone ESXi 8.0.3 host read the same bytes over both transports.
+- **On our own ESXi 7.0 GA host, 2026-11-23.** A nested ESXi 7.0.0 GA host
+  (build 15843807, installed from a public installer image), with 20 GiB test
+  disks on an NFS v3 and a VMFS 6 datastore. The released 0.7.5 was compared
+  with VDDK 8.0.3 on the same inputs (evidence
+  (evidence kept privately)):
+  - signed in to the host directly: whole reads over NBDSSL and NBD gave the
+    same SHA-256 as VDDK 8.0.3 on both datastores, and the log names the
+    host's NFC version 5; allocated blocks, GetInfo and metadata, changed
+    block tracking (the two areas written between two snapshots found and
+    read with the same hash), PrepareForAccess and EndAccess, and the codes
+    of failed opens were the same;
+  - through vCenter 7.0.3 (b19234570, the host added as a standalone host),
+    with the reader VM on the host itself: whole reads over HotAdd, NBDSSL
+    and NBD gave the same SHA-256 as VDDK 8.0.3 on both datastores;
+    allocated blocks, metadata and changed block tracking were the same;
+    virt-v2v (`-o null`) completed with both libraries over NBDSSL and NBD
+    from both datastores;
+  - the differences are the known ones, the same as on other hosts: opening
+    a disk with a snapshot that does not exist (VMware's library falls back
+    to NBD, 0.7.5 answers 13003; LOG-0001); "hotadd" as the only transport
+    from a reader that is not a VM of this host (VMware's library fails at
+    ConnectEx with 3, 0.7.5 at Open with 13); a connection reset during a
+    read (VMware's test program ended by SIGPIPE, 0.7.5 returns 14009;
+    D-0049);
+  - the before case: 0.7.4 on the same host fails at Open with "bad frame
+    magic 0x4", as reported in openvddk/openvddk#1.
+  The timings come from a nested lab and are not published.
 - **An unchanged handshake** for the hosts that answer NFC version 2, 9, 11
   and 12 (6.7, 7.0 Update 3, 8.0.3 and 9.1.1), in our own labs: the release
   checks of 0.7.5 (NBD-0035).
 
 ## Still not verified
 
-- A 7.0 GA host in our own lab (we have none), and HotAdd on 7.0 GA (not
-  part of the reporter's run).
+- vCenter 7.0.0 GA itself: our 7.0 GA host was managed by vCenter 7.0.3.
 - ESXi 7.0 Update 1 and Update 2.

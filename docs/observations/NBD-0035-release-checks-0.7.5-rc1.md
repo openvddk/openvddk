@@ -73,7 +73,9 @@ removed.
   openvddk/openvddk#1 offered to run the candidate. *Update 2026-11-23:* the
   reporter ran the released 0.7.5 on their 7.0 GA host: NBD and NBDSSL read
   the same bytes as VMware's library, and a warm migration from that host
-  finished (NBD-0032). HotAdd on 7.0 GA was not part of that run.
+  finished (NBD-0032). HotAdd on 7.0 GA was not part of that run. *Later the
+  same day:* 0.7.5 checked on a 7.0 GA host of our own, directly and through
+  vCenter, HotAdd included (NBD-0032).
 - ESXi 7.0 Update 1 and Update 2.
 - HotAdd through a reader that is itself encrypted.
 - The read rates in the evidence are not a speed comparison: the fixtures
