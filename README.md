@@ -43,7 +43,8 @@ problems" below).
 ## What is supported
 
 - vSphere 6.7, 7.0, 8.0 and 9.1 (tested on 6.7 U3, 7.0.3, 8.0.3 and 9.1.1;
-  ESXi 7.0 GA verified over NBDSSL and NBD on a user's host), through
+  ESXi 7.0 GA verified over NBDSSL and NBD on a user's host, and over
+  HotAdd, NBDSSL and NBD on our own), through
   vCenter and by signing in to an ESXi host directly, including a
   standalone host without vCenter
   ([docs/COMPATIBILITY-MATRIX.md](docs/COMPATIBILITY-MATRIX.md)).
